@@ -1,14 +1,15 @@
 # WMA Communication — pacchetto Joomla 6
 
 Form builder avanzato per Joomla 6: **componente** `com_wmacommunication` +
-**modulo** `mod_wmacommunication`, distribuiti come pacchetto unico
-`pkg_wmacommunication`.
+**modulo** `mod_wmacommunication` + **plugin** `plg_content_wmacommunication`,
+distribuiti come pacchetto unico `pkg_wmacommunication`.
 
 ## Struttura repo
 
 ```
 com_wmacommunication/          sorgente del componente (wmacommunication.xml alla radice)
 mod_wmacommunication/          sorgente del modulo
+plg_content_wmacommunication/  plugin di contenuto (cattura titolo articolo per i campi automatici)
 pkg_wmacommunication/          manifest + script + lingue del pacchetto
 pkg_wmacommunication_update.xml   update server (servito via raw.githubusercontent)
 .github/workflows/release.yml     build automatica dello ZIP a ogni release

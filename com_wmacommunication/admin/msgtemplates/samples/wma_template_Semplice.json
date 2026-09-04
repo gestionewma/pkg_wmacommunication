@@ -1,0 +1,4 @@
+{
+    "title": "Semplice",
+    "body": "<div style=\"font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #1e293b; line-height: 1.6;\">\n    <p>Hai ricevuto un nuovo messaggio dal form del sito.</p>\n    <p><strong>Nome:</strong> {Nome}</p>\n    <p><strong>Email:</strong> {Email}</p>\n    <p><strong>Telefono:</strong> {Telefono}</p>\n    <p><strong>Messaggio:</strong><br>{Messaggio}</p>\n</div>"
+}

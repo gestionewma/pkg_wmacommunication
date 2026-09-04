@@ -27,7 +27,10 @@ jobs:
           # 2) ZIP del modulo (mod_wmacommunication.xml alla radice dello zip)
           ( cd mod_wmacommunication && zip -r -X "../_stage/mod_wmacommunication.zip" . -x "*.git*" )
 
-          # 3) File del pacchetto: manifest + script + lingue + i due zip
+          # 2b) ZIP del plugin di contesto pagina
+          ( cd plg_content_wmacommunication && zip -r -X "../_stage/plg_content_wmacommunication.zip" . -x "*.git*" )
+
+          # 3) File del pacchetto: manifest + script + lingue + gli zip delle estensioni
           cp pkg_wmacommunication/pkg_wmacommunication.xml _stage/
           cp pkg_wmacommunication/script.php               _stage/
           cp -r pkg_wmacommunication/language              _stage/

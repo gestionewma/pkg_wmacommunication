@@ -10,11 +10,12 @@ $ErrorActionPreference = 'Stop'
 
 $comp  = Join-Path $PSScriptRoot 'com_wmacommunication'
 $mod   = Join-Path $PSScriptRoot 'mod_wmacommunication'
+$plg   = Join-Path $PSScriptRoot 'plg_content_wmacommunication'
 $pkg   = Join-Path $PSScriptRoot 'pkg_wmacommunication'
 $build = Join-Path $PSScriptRoot '_build'
 $stage = Join-Path $build '_pkg_stage'
 
-foreach ($p in @($comp, $mod, $pkg)) {
+foreach ($p in @($comp, $mod, $plg, $pkg)) {
     if (-not (Test-Path $p)) { throw "Cartella mancante: $p" }
 }
 
@@ -28,6 +29,10 @@ Compress-Archive -Path (Join-Path $comp '*') `
 # 2) ZIP del modulo
 Compress-Archive -Path (Join-Path $mod '*') `
     -DestinationPath (Join-Path $stage 'mod_wmacommunication.zip') -Force
+
+# 2b) ZIP del plugin (contesto pagina, per i campi URL pagina / Titolo articolo)
+Compress-Archive -Path (Join-Path $plg '*') `
+    -DestinationPath (Join-Path $stage 'plg_content_wmacommunication.zip') -Force
 
 # 3) File del pacchetto: manifest + script + lingue + i due zip
 Copy-Item (Join-Path $pkg 'pkg_wmacommunication.xml') $stage

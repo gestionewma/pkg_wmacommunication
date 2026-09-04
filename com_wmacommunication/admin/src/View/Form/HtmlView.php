@@ -31,6 +31,7 @@ class HtmlView extends BaseHtmlView
     protected $fieldTypes;
     protected $checkedOut;
     protected $languages;
+    protected $messageTemplates;
 
     public function display($tpl = null): void
     {
@@ -38,11 +39,12 @@ class HtmlView extends BaseHtmlView
         $wa->useStyle('com_wmacommunication.admin');
         $wa->useScript('com_wmacommunication.editor');
 
-        $this->form       = $this->get('Form');
-        $this->item       = $this->get('Item');
-        $this->state      = $this->get('State');
-        $this->fieldTypes = $this->getFieldTypes();
-        $this->languages  = LanguageHelper::getLanguages();
+        $this->form             = $this->get('Form');
+        $this->item             = $this->get('Item');
+        $this->state            = $this->get('State');
+        $this->fieldTypes       = $this->getFieldTypes();
+        $this->languages        = LanguageHelper::getLanguages();
+        $this->messageTemplates = $this->getMessageTemplates();
 
         $userId           = Factory::getApplication()->getIdentity()->id;
         $checkedOut       = (int) ($this->item->checked_out ?? 0);
@@ -75,6 +77,11 @@ class HtmlView extends BaseHtmlView
         Text::script('COM_WMACOMMUNICATION_FIELD_SUBMIT');
         Text::script('COM_WMACOMMUNICATION_FIELD_PRIVACY');
         Text::script('COM_WMACOMMUNICATION_FIELD_OFFICE');
+        Text::script('COM_WMACOMMUNICATION_FIELD_PAGE_URL');
+        Text::script('COM_WMACOMMUNICATION_FIELD_ARTICLE_TITLE');
+        Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_AUTO_VISIBLE');
+        Text::script('COM_WMACOMMUNICATION_EDITOR_PAGE_URL_INFO');
+        Text::script('COM_WMACOMMUNICATION_EDITOR_ARTICLE_TITLE_INFO');
         Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_LABEL');
         Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_LABEL_HINT');
         Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_PLACEHOLDER');
@@ -87,6 +94,11 @@ class HtmlView extends BaseHtmlView
         Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_MAXCHARS');
         Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_MINWORDS');
         Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_MAXWORDS');
+        Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_LIST_COLUMN');
+        Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_LIST_COLUMN_NONE');
+        Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_LIST_COLUMN_1');
+        Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_LIST_COLUMN_2');
+        Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_LIST_COLUMN_HINT');
         Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_ROWS');
         Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_MIN');
         Text::script('COM_WMACOMMUNICATION_EDITOR_OPT_MAX');
@@ -154,6 +166,11 @@ class HtmlView extends BaseHtmlView
         Text::script('COM_WMACOMMUNICATION_MESSAGES_LOGO_PROMPT_URL');
         Text::script('COM_WMACOMMUNICATION_MESSAGES_LOGO_PROMPT_ALT');
         Text::script('COM_WMACOMMUNICATION_MESSAGES_LOGO_PROMPT_WIDTH');
+        Text::script('COM_WMACOMMUNICATION_MESSAGES_CHIPS_LABEL');
+        Text::script('COM_WMACOMMUNICATION_MESSAGES_TEMPLATE_PLACEHOLDER');
+        Text::script('COM_WMACOMMUNICATION_MESSAGES_TEMPLATE_CONFIRM_OVERWRITE');
+        Text::script('COM_WMACOMMUNICATION_MESSAGES_SAVE_AS_TEMPLATE_PROMPT');
+        Text::script('COM_WMACOMMUNICATION_MESSAGES_SAVE_AS_TEMPLATE_EMPTY');
 
         $this->addToolbar();
 
@@ -197,6 +214,30 @@ class HtmlView extends BaseHtmlView
             'office'     => ['label' => 'COM_WMACOMMUNICATION_FIELD_OFFICE',     'icon' => 'fa-building'],
             'hcaptcha'   => ['label' => 'COM_WMACOMMUNICATION_FIELD_HCAPTCHA',   'icon' => 'fa-shield'],
             'submit'     => ['label' => 'COM_WMACOMMUNICATION_FIELD_SUBMIT',     'icon' => 'fa-paper-plane'],
+            'page_url'      => ['label' => 'COM_WMACOMMUNICATION_FIELD_PAGE_URL',      'icon' => 'fa-link'],
+            'article_title' => ['label' => 'COM_WMACOMMUNICATION_FIELD_ARTICLE_TITLE', 'icon' => 'fa-newspaper-o'],
         ];
+    }
+
+    /**
+     * Libreria template messaggio (solo pubblicati) per il selettore nel tab
+     * Messaggi dell'editor. Nessuna chiamata AJAX: i dati vengono incorporati
+     * nella pagina (come fields/settings) e letti da editor.js.
+     */
+    protected function getMessageTemplates(): array
+    {
+        $db = Factory::getContainer()->get(\Joomla\Database\DatabaseInterface::class);
+
+        $query = $db->getQuery(true)
+            ->select($db->quoteName(['id', 'title', 'body']))
+            ->from($db->quoteName('#__wmacommunication_templates'))
+            ->where($db->quoteName('state') . ' = 1')
+            ->order($db->quoteName('title') . ' ASC');
+
+        try {
+            return $db->setQuery($query)->loadAssocList() ?: [];
+        } catch (\Throwable $e) {
+            return [];
+        }
     }
 }

@@ -4,11 +4,12 @@
     <author>Team Developer by WMA Web Maker Agency</author>
     <authorEmail>wmaextension@gmail.com</authorEmail>
     <authorUrl>https://www.wma.ovh</authorUrl>
-    <creationDate>02/09/2026</creationDate>
+    <creationDate>04/09/2026</creationDate>
     <copyright>Copyright (C) 2026 Gestionewma. Tutti i diritti riservati.</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-    <version>2.1.6</version>
+    <version>2.2.0</version>
     <description>COM_WMACOMMUNICATION_DESC</description>
+    <changelogurl>https://raw.githubusercontent.com/gestionewma/pkg_wmacommunication/main/changelog.xml</changelogurl>
 
     <namespace path="src">Wma\Component\Wmacommunication</namespace>
 
@@ -25,11 +26,14 @@
     <submenu>
         <menu link="option=com_wmacommunication&amp;view=dashboard">COM_WMACOMMUNICATION_DASHBOARD</menu>
         <menu link="option=com_wmacommunication&amp;view=forms">COM_WMACOMMUNICATION_FORMS</menu>
+        <menu link="option=com_wmacommunication&amp;view=templates">COM_WMACOMMUNICATION_TEMPLATES</menu>
+        <menu link="option=com_wmacommunication&amp;view=submissions">COM_WMACOMMUNICATION_SUBMISSIONS</menu>
     </submenu>
         <files folder="admin">
             <filename>access.xml</filename>
             <filename>config.xml</filename>
             <folder>forms</folder>
+            <folder>msgtemplates</folder>
             <folder>services</folder>
             <folder>sql</folder>
             <folder>src</folder>

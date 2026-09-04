@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+    <fieldset name="general" label="COM_WMACOMMUNICATION_TEMPLATE_GENERAL">
+        <field
+            name="id"
+            type="hidden"
+            filter="int"
+        />
+        <field
+            name="title"
+            type="text"
+            label="JGLOBAL_TITLE"
+            required="true"
+            size="40"
+        />
+        <field
+            name="state"
+            type="list"
+            label="JSTATUS"
+            default="1"
+            filter="integer"
+        >
+            <option value="1">JPUBLISHED</option>
+            <option value="0">JUNPUBLISHED</option>
+        </field>
+        <field
+            name="body"
+            type="textarea"
+            label="COM_WMACOMMUNICATION_TEMPLATE_BODY"
+            description="COM_WMACOMMUNICATION_TEMPLATE_BODY_DESC"
+            rows="16"
+            class="wma-template-body-field"
+            filter="safehtml"
+        />
+    </fieldset>
+</form>

@@ -57,6 +57,57 @@ class Com_WmacommunicationInstallerScript
             . "  KEY `idx_created` (`created`)\n"
             . ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci"
         )->execute();
+
+        // Tabella libreria template messaggio
+        $db->setQuery(
+            "CREATE TABLE IF NOT EXISTS `#__wmacommunication_templates` (\n"
+            . "  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,\n"
+            . "  `title` VARCHAR(255) NOT NULL DEFAULT '',\n"
+            . "  `body` LONGTEXT,\n"
+            . "  `state` TINYINT(1) NOT NULL DEFAULT 1,\n"
+            . "  `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',\n"
+            . "  `created_by` INT(11) UNSIGNED NOT NULL DEFAULT 0,\n"
+            . "  `modified` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',\n"
+            . "  `modified_by` INT(11) UNSIGNED NOT NULL DEFAULT 0,\n"
+            . "  PRIMARY KEY (`id`),\n"
+            . "  KEY `idx_state` (`state`)\n"
+            . ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci"
+        )->execute();
+
+        // Tabella invii salvati (F1)
+        $db->setQuery(
+            "CREATE TABLE IF NOT EXISTS `#__wmacommunication_submissions` (\n"
+            . "  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,\n"
+            . "  `form_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,\n"
+            . "  `form_title` VARCHAR(255) NOT NULL DEFAULT '',\n"
+            . "  `summary` VARCHAR(500) NOT NULL DEFAULT '',\n"
+            . "  `data` MEDIUMTEXT,\n"
+            . "  `col1_label` VARCHAR(255) NOT NULL DEFAULT '',\n"
+            . "  `col1_value` VARCHAR(500) NOT NULL DEFAULT '',\n"
+            . "  `col2_label` VARCHAR(255) NOT NULL DEFAULT '',\n"
+            . "  `col2_value` VARCHAR(500) NOT NULL DEFAULT '',\n"
+            . "  `ip` VARCHAR(45) NOT NULL DEFAULT '',\n"
+            . "  `is_read` TINYINT(1) NOT NULL DEFAULT 0,\n"
+            . "  `created` DATETIME NOT NULL,\n"
+            . "  PRIMARY KEY (`id`),\n"
+            . "  KEY `idx_form_id` (`form_id`),\n"
+            . "  KEY `idx_created` (`created`)\n"
+            . ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci"
+        )->execute();
+
+        // Colonne colonna1/colonna2 (F1b) per chi ha già la tabella da un update precedente.
+        // La CREATE TABLE IF NOT EXISTS sopra garantisce che la tabella esista già a
+        // questo punto: niente bisogno di verificarlo, solo delle singole colonne nuove.
+        try {
+            $subColumns = $db->getTableColumns('#__wmacommunication_submissions');
+            foreach (['col1_label' => 'VARCHAR(255)', 'col1_value' => 'VARCHAR(500)', 'col2_label' => 'VARCHAR(255)', 'col2_value' => 'VARCHAR(500)'] as $col => $def) {
+                if (!array_key_exists($col, $subColumns)) {
+                    $db->setQuery("ALTER TABLE `#__wmacommunication_submissions` ADD COLUMN `{$col}` {$def} NOT NULL DEFAULT '' AFTER `data`")->execute();
+                }
+            }
+        } catch (\Throwable $e) {
+            // best effort: non deve bloccare l'installazione
+        }
     }
 
     public function postflight(string $type, InstallerAdapter $adapter): void
@@ -64,6 +115,8 @@ class Com_WmacommunicationInstallerScript
         $this->deployMediaFiles($adapter);
 
         $this->installSamples($adapter);
+
+        $this->installTemplateSamples($adapter);
 
         $this->prepareAttachmentsDir();
 
@@ -157,13 +210,15 @@ class Com_WmacommunicationInstallerScript
             }
         }
 
-        $dir = \dirname(JPATH_ROOT) . '/wmacommunication-uploads';
-        if (!is_dir($dir) && !@mkdir($dir, 0755, true)) {
-            $dir = JPATH_ROOT . '/wmacommunication-uploads';
+        // @ obbligatorio: con open_basedir attivo, controllare/creare un percorso
+        // fuori dai path consentiti genera un Warning visibile, non solo "false".
+        $dir = \dirname(JPATH_ROOT) . '/_wmacommunication-uploads';
+        if (!@is_dir($dir) && !@mkdir($dir, 0755, true)) {
+            $dir = JPATH_ROOT . '/_wmacommunication-uploads';
             @mkdir($dir, 0755, true);
         }
 
-        if (is_dir($dir) && !is_file($dir . '/.htaccess')) {
+        if (@is_dir($dir) && !@is_file($dir . '/.htaccess')) {
             @file_put_contents(
                 $dir . '/.htaccess',
                 "Options -Indexes -ExecCGI\n"
@@ -238,6 +293,70 @@ class Com_WmacommunicationInstallerScript
 
             $query = $db->getQuery(true)
                 ->insert($db->quoteName('#__wmacommunication_forms'))
+                ->columns(array_map(fn($c) => $db->quoteName($c), $columns))
+                ->values(implode(',', $values));
+            $db->setQuery($query)->execute();
+        }
+    }
+
+    /**
+     * Installa i template messaggio di serie. A differenza dei form-sample
+     * (che diventano pagine pubbliche) un template è testo inerte: non ha
+     * effetto finché un admin non lo carica in un form, quindi si installa
+     * già pubblicato.
+     */
+    private function installTemplateSamples(InstallerAdapter $adapter): void
+    {
+        $source     = $adapter->getParent()->getPath('source');
+        $samplesDir = $source . '/admin/msgtemplates/samples';
+
+        if (!is_dir($samplesDir)) {
+            return;
+        }
+
+        $files = glob($samplesDir . '/*.json');
+
+        if (empty($files)) {
+            return;
+        }
+
+        $db     = \Joomla\CMS\Factory::getContainer()->get('DatabaseDriver');
+        $app    = \Joomla\CMS\Factory::getApplication();
+        $now    = \Joomla\CMS\Factory::getDate()->toSql();
+        $userId = $app->getIdentity() ? $app->getIdentity()->id : 0;
+
+        foreach ($files as $file) {
+            $content = file_get_contents($file);
+            $data    = json_decode($content, true);
+
+            if (!$data || !isset($data['title'])) {
+                continue;
+            }
+
+            $query = $db->getQuery(true)
+                ->select('COUNT(*)')
+                ->from($db->quoteName('#__wmacommunication_templates'))
+                ->where($db->quoteName('title') . ' = ' . $db->quote($data['title']));
+            $exists = (int) $db->setQuery($query)->loadResult();
+
+            if ($exists) {
+                continue;
+            }
+
+            unset($data['id']);
+            $data = array_intersect_key($data, array_flip(['title', 'body']));
+
+            $data['state']       = 1;
+            $data['created']     = $now;
+            $data['created_by']  = $userId;
+            $data['modified']    = $now;
+            $data['modified_by'] = $userId;
+
+            $columns = array_keys($data);
+            $values  = array_map(fn($v) => is_null($v) ? 'NULL' : $db->quote($v), array_values($data));
+
+            $query = $db->getQuery(true)
+                ->insert($db->quoteName('#__wmacommunication_templates'))
                 ->columns(array_map(fn($c) => $db->quoteName($c), $columns))
                 ->values(implode(',', $values));
             $db->setQuery($query)->execute();

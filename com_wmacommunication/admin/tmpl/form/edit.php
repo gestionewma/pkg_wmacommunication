@@ -175,6 +175,16 @@ if ($checkedOut) {
                         <small class="wma-msg-hint"><?= Text::_('COM_WMACOMMUNICATION_SENDING_SENDER_NAME_DESC') ?></small>
                     </div>
 
+                    <div class="wma-field-option">
+                        <label><?= Text::_('COM_WMACOMMUNICATION_SENDING_DELIVERY_MODE') ?></label>
+                        <select id="wma-sending-delivery-mode">
+                            <option value="email"><?= Text::_('COM_WMACOMMUNICATION_SENDING_DELIVERY_MODE_EMAIL') ?></option>
+                            <option value="email_db"><?= Text::_('COM_WMACOMMUNICATION_SENDING_DELIVERY_MODE_EMAIL_DB') ?></option>
+                            <option value="db"><?= Text::_('COM_WMACOMMUNICATION_SENDING_DELIVERY_MODE_DB') ?></option>
+                        </select>
+                        <small class="wma-msg-hint"><?= Text::_('COM_WMACOMMUNICATION_SENDING_DELIVERY_MODE_DESC') ?></small>
+                    </div>
+
                 </div>
             </div>
 
@@ -189,16 +199,29 @@ if ($checkedOut) {
 
                     <div class="wma-field-option">
                         <label><?= Text::_('COM_WMACOMMUNICATION_MESSAGES_EMAIL_BODY') ?></label>
+
+                        <div class="wma-msg-template-row">
+                            <label for="wma-msg-template-select"><?= Text::_('COM_WMACOMMUNICATION_MESSAGES_TEMPLATE_LABEL') ?></label>
+                            <select id="wma-msg-template-select"></select>
+                            <button type="button" id="wma-msg-btn-preview"><i class="fa fa-eye"></i> <?= Text::_('COM_WMACOMMUNICATION_TEMPLATE_PREVIEW') ?></button>
+                            <button type="button" id="wma-msg-btn-save-template"><i class="fa fa-save"></i> <?= Text::_('COM_WMACOMMUNICATION_MESSAGES_SAVE_AS_TEMPLATE') ?></button>
+                        </div>
+
                         <div class="wma-msg-toolbar">
                             <button type="button" id="wma-msg-btn-link"><i class="fa fa-link"></i> <?= Text::_('COM_WMACOMMUNICATION_MESSAGES_TOOLBAR_LINK') ?></button>
                             <button type="button" id="wma-msg-btn-image"><i class="fa fa-image"></i> <?= Text::_('COM_WMACOMMUNICATION_MESSAGES_TOOLBAR_IMAGE') ?></button>
                         </div>
+                        <div class="wma-msg-chips" id="wma-msg-chips" hidden></div>
                         <textarea id="wma-msg-email-body" rows="8" placeholder="<?= $this->escape(Text::_('COM_WMACOMMUNICATION_SENDING_EMAIL_BODY_PLACEHOLDER')) ?>"></textarea>
                         <small class="wma-msg-hint"><?= Text::_('COM_WMACOMMUNICATION_MESSAGES_EMAIL_BODY_HINT') ?></small>
+
+                        <iframe id="wma-msg-preview-frame" title="<?= Text::_('COM_WMACOMMUNICATION_TEMPLATE_PREVIEW') ?>" hidden></iframe>
                     </div>
 
                 </div>
             </div>
+
+            <input type="hidden" id="wma-input-templates" value="<?= $this->escape(json_encode($this->messageTemplates)) ?>">
 
         </div>
 

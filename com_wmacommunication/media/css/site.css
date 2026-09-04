@@ -40,6 +40,18 @@
 .wma-cf-submit {
     margin-top: 1.5rem;
 }
+
+.wma-cf-auto-value {
+    padding: .4rem .6rem;
+    background: var(--wma-cf-secondary-color, #6c757d);
+    background: rgba(108, 117, 125, .08);
+    border: 1px solid rgba(108, 117, 125, .25);
+    border-radius: var(--wma-cf-border-radius);
+    color: var(--wma-cf-secondary-color);
+    font-size: .9rem;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
 .wma-cf-privacy input {
 	margin-bottom: 0;
 }
@@ -73,6 +85,11 @@ span.wma-cf-privacy-text {
     padding: .5rem;
     box-sizing: border-box;
     margin-bottom: .5rem;
+    /* Senza questo, un campo con contenuto lungo e non spezzabile (es. l'URL
+       del campo automatico) ignora la percentuale assegnata: un elemento
+       flessibile per default non si restringe mai sotto la dimensione del
+       proprio contenuto (min-width: auto), spingendo/rompendo gli altri campi. */
+    min-width: 0;
 }
 
 .wma-cf-field label {

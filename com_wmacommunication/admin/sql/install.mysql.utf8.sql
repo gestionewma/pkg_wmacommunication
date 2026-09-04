@@ -19,6 +19,37 @@ CREATE TABLE IF NOT EXISTS `#__wmacommunication_forms` (
     KEY `idx_state` (`state`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `#__wmacommunication_templates` (
+    `id`          INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `title`       VARCHAR(255) NOT NULL DEFAULT '',
+    `body`        LONGTEXT COMMENT 'HTML del corpo email',
+    `state`       TINYINT(1) NOT NULL DEFAULT 1,
+    `created`     DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `created_by`  INT(11) UNSIGNED NOT NULL DEFAULT 0,
+    `modified`    DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `modified_by` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`),
+    KEY `idx_state` (`state`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `#__wmacommunication_submissions` (
+    `id`         INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `form_id`    INT(11) UNSIGNED NOT NULL DEFAULT 0,
+    `form_title` VARCHAR(255) NOT NULL DEFAULT '',
+    `summary`    VARCHAR(500) NOT NULL DEFAULT '',
+    `data`       MEDIUMTEXT COMMENT 'JSON label/valore dei campi inviati',
+    `col1_label` VARCHAR(255) NOT NULL DEFAULT '',
+    `col1_value` VARCHAR(500) NOT NULL DEFAULT '',
+    `col2_label` VARCHAR(255) NOT NULL DEFAULT '',
+    `col2_value` VARCHAR(500) NOT NULL DEFAULT '',
+    `ip`         VARCHAR(45) NOT NULL DEFAULT '',
+    `is_read`    TINYINT(1) NOT NULL DEFAULT 0,
+    `created`    DATETIME NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `idx_form_id` (`form_id`),
+    KEY `idx_created` (`created`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `#__wmacommunication_uploads` (
     `id`            INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
     `token`         VARCHAR(64) NOT NULL,

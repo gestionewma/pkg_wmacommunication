@@ -27,8 +27,8 @@ const WmaEditor = {
 
     // Definizioni default per ogni tipo di campo
     fieldDefaults: {
-        text:        { type: 'text',        label: '', placeholder: '', required: false, readonly: false, hidelabel: false, labelinside: false, width: '100', minchars: 0, maxchars: 0, minwords: 0, maxwords: 0 },
-        email:       { type: 'email',       label: '', placeholder: '', required: false, readonly: false, hidelabel: false, labelinside: false, width: '100' },
+        text:        { type: 'text',        label: '', placeholder: '', required: false, readonly: false, hidelabel: false, labelinside: false, width: '100', minchars: 0, maxchars: 0, minwords: 0, maxwords: 0, list_column: '' },
+        email:       { type: 'email',       label: '', placeholder: '', required: false, readonly: false, hidelabel: false, labelinside: false, width: '100', list_column: '' },
         textarea:    { type: 'textarea',    label: '', placeholder: '', required: false, readonly: false, hidelabel: false, labelinside: false, width: '100', rows: 6, minchars: 0, maxchars: 0, minwords: 0, maxwords: 0 },
         number:      { type: 'number',      label: '', placeholder: '', required: false, readonly: false, hidelabel: false, labelinside: false, width: '100', min: '', max: '', step: 1 },
         tel:         { type: 'tel',         label: '', placeholder: '', required: false, readonly: false, hidelabel: false, labelinside: false, width: '100', inputmask: '' },
@@ -45,6 +45,8 @@ const WmaEditor = {
         submit:      { type: 'submit',      label: '', width: '100', text: '' },
         privacy:     { type: 'privacy',     label: '', width: '100', privacy_text: '', privacy_url: '' },
         office:      { type: 'office',      label: '', width: '100', required: false, hidelabel: false, options: '' },
+        page_url:      { type: 'page_url',      label: '', width: '100', hidelabel: false, visible: true },
+        article_title: { type: 'article_title', label: '', width: '100', hidelabel: false, visible: true },
     },
 
     // Traduce una costante Joomla registrata con Text::script()
@@ -150,6 +152,8 @@ const WmaEditor = {
         if (editor) {
             editor.classList.toggle('wma-editor--preview-hidden', tabName === 'sending' || tabName === 'messages');
         }
+
+        if (tabName === 'messages') this.renderMsgChips();
     },
 
     // -------------------------------------------------------------------------
@@ -530,8 +534,8 @@ const WmaEditor = {
             html += this.optionText('placeholder', this.t('COM_WMACOMMUNICATION_EDITOR_OPT_PLACEHOLDER'), field.placeholder ?? '');
         }
 
-        // --- Obbligatorio (esclusi campi non compilabili e privacy che è sempre required) ---
-        if (!['html','heading','divider','emptyspace','hcaptcha','submit','privacy'].includes(field.type)) {
+        // --- Obbligatorio (esclusi campi non compilabili, privacy che è sempre required, campi automatici) ---
+        if (!['html','heading','divider','emptyspace','hcaptcha','submit','privacy','page_url','article_title'].includes(field.type)) {
             html += this.optionCheck('required', this.t('COM_WMACOMMUNICATION_EDITOR_OPT_REQUIRED'), field.required ?? false);
         }
 
@@ -557,6 +561,18 @@ const WmaEditor = {
             html += this.optionNumber('maxchars', this.t('COM_WMACOMMUNICATION_EDITOR_OPT_MAXCHARS'), field.maxchars ?? 0, 0);
             html += this.optionNumber('minwords', this.t('COM_WMACOMMUNICATION_EDITOR_OPT_MINWORDS'), field.minwords ?? 0, 0);
             html += this.optionNumber('maxwords', this.t('COM_WMACOMMUNICATION_EDITOR_OPT_MAXWORDS'), field.maxwords ?? 0, 0);
+        }
+
+        // --- Colonna nella lista invii ricevuti (solo testo/email) ---
+        if (['text', 'email'].includes(field.type)) {
+            html += this.optionSelect('list_column', this.t('COM_WMACOMMUNICATION_EDITOR_OPT_LIST_COLUMN'), field.list_column ?? '', {
+                '':  this.t('COM_WMACOMMUNICATION_EDITOR_OPT_LIST_COLUMN_NONE'),
+                '1': this.t('COM_WMACOMMUNICATION_EDITOR_OPT_LIST_COLUMN_1'),
+                '2': this.t('COM_WMACOMMUNICATION_EDITOR_OPT_LIST_COLUMN_2'),
+            });
+            html += `<div class="wma-field-option">
+                <small class="wma-msg-hint">${this.t('COM_WMACOMMUNICATION_EDITOR_OPT_LIST_COLUMN_HINT')}</small>
+            </div>`;
         }
 
         if (field.type === 'textarea') {
@@ -596,6 +612,14 @@ const WmaEditor = {
             html += this.optionTextarea('options', this.t('COM_WMACOMMUNICATION_EDITOR_OPT_OFFICE_OPTIONS'), field.options ?? '');
             html += `<div class="wma-field-option">
                 <p class="wma-privacy-info">${this.t('COM_WMACOMMUNICATION_EDITOR_OFFICE_INFO')}</p>
+            </div>`;
+        }
+
+        // --- Campi automatici: URL pagina / Titolo articolo ---
+        if (['page_url','article_title'].includes(field.type)) {
+            html += this.optionCheck('visible', this.t('COM_WMACOMMUNICATION_EDITOR_OPT_AUTO_VISIBLE'), field.visible ?? true);
+            html += `<div class="wma-field-option">
+                <p class="wma-privacy-info">${this.t(field.type === 'page_url' ? 'COM_WMACOMMUNICATION_EDITOR_PAGE_URL_INFO' : 'COM_WMACOMMUNICATION_EDITOR_ARTICLE_TITLE_INFO')}</p>
             </div>`;
         }
 
@@ -793,12 +817,12 @@ const WmaEditor = {
 
     initSendingTab() {
         // Collega i campi della tab Invio alle impostazioni _settings
-        const fields = ['to', 'cc', 'ccn', 'sender-name'];
+        const fields = ['to', 'cc', 'ccn', 'sender-name', 'delivery-mode'];
         fields.forEach(key => {
             const el = document.getElementById(`wma-sending-${key}`);
             if (!el) return;
             const settingKey = key.replaceAll('-', '_');
-            if (this._settings[settingKey]) el.value = this._settings[settingKey];
+            el.value = this._settings[settingKey] || (settingKey === 'delivery_mode' ? 'email' : '');
             el.addEventListener('input', () => { this._settings[settingKey] = el.value; });
             el.addEventListener('change', () => { this._settings[settingKey] = el.value; });
         });
@@ -887,7 +911,145 @@ const WmaEditor = {
         const imageBtn = document.getElementById('wma-msg-btn-image');
         if (imageBtn) imageBtn.addEventListener('click', () => this._msgInsert('image'));
 
+        this.renderMsgChips();
+        this.initTemplatePicker();
         this.syncMessagesFields();
+    },
+
+    // Selettore "Template" + "Salva come template" + anteprima, sul corpo email.
+    // Nessuna chiamata AJAX: la libreria template arriva già incorporata nella
+    // pagina (hidden input #wma-input-templates), come fields/settings.
+    initTemplatePicker() {
+        const select = document.getElementById('wma-msg-template-select');
+        if (!select) return;
+
+        let templates = [];
+        const raw = document.getElementById('wma-input-templates');
+        if (raw && raw.value) {
+            try { templates = JSON.parse(raw.value) || []; } catch (e) { templates = []; }
+        }
+
+        select.innerHTML = '<option value="">' + this.t('COM_WMACOMMUNICATION_MESSAGES_TEMPLATE_PLACEHOLDER') + '</option>';
+        templates.forEach(tpl => {
+            const opt = document.createElement('option');
+            opt.value = tpl.id;
+            opt.textContent = tpl.title;
+            select.appendChild(opt);
+        });
+
+        select.addEventListener('change', () => {
+            const tpl = templates.find(t => String(t.id) === select.value);
+            select.value = '';
+            if (!tpl) return;
+
+            const ta = document.getElementById('wma-msg-email-body');
+            if (!ta) return;
+
+            if (ta.value.trim() !== '' && !confirm(this.t('COM_WMACOMMUNICATION_MESSAGES_TEMPLATE_CONFIRM_OVERWRITE'))) {
+                return;
+            }
+
+            ta.value = tpl.body || '';
+            ta.dispatchEvent(new Event('input'));
+        });
+
+        const saveBtn = document.getElementById('wma-msg-btn-save-template');
+        if (saveBtn) saveBtn.addEventListener('click', () => this.saveAsTemplate());
+
+        const previewBtn = document.getElementById('wma-msg-btn-preview');
+        const frame       = document.getElementById('wma-msg-preview-frame');
+        const body        = document.getElementById('wma-msg-email-body');
+
+        if (previewBtn && frame && body) {
+            const update = () => { frame.srcdoc = body.value || ''; };
+            previewBtn.addEventListener('click', () => {
+                frame.hidden = !frame.hidden;
+                if (!frame.hidden) update();
+            });
+            body.addEventListener('input', () => {
+                if (!frame.hidden) update();
+            });
+        }
+    },
+
+    // Passa il corpo email corrente a una nuova scheda per salvarlo come
+    // template (vista Template dell'admin, precompilata via sessionStorage).
+    saveAsTemplate() {
+        const ta = document.getElementById('wma-msg-email-body');
+        if (!ta || !ta.value.trim()) {
+            alert(this.t('COM_WMACOMMUNICATION_MESSAGES_SAVE_AS_TEMPLATE_EMPTY'));
+            return;
+        }
+
+        const title = prompt(this.t('COM_WMACOMMUNICATION_MESSAGES_SAVE_AS_TEMPLATE_PROMPT'), '');
+        if (!title) return;
+
+        try {
+            sessionStorage.setItem('wma_template_prefill', JSON.stringify({ title: title, body: ta.value }));
+        } catch (e) { /* ignora: la nuova scheda si aprirà comunque vuota */ }
+
+        window.open('index.php?option=com_wmacommunication&task=template.add', '_blank');
+
+        // Salva subito (Applica, senza chiudere) anche il form corrente: senza
+        // questo, passando alla scheda del template il form resterebbe a metà,
+        // con le modifiche non salvate e la scheda originale "in sospeso".
+        this.applyForm();
+    },
+
+    // Invia il form dell'editor con task "Applica" (salva senza chiudere),
+    // passando dagli stessi controlli/sincronizzazione di bindSave().
+    applyForm() {
+        const form = document.getElementById('adminForm');
+        if (!form) return;
+
+        const taskEl = form.querySelector('input[name="task"]');
+        if (taskEl) taskEl.value = 'form.apply';
+
+        if (form.requestSubmit) {
+            form.requestSubmit();
+        } else {
+            form.submit();
+        }
+    },
+
+    // Chip {Etichetta} cliccabili: inseriscono il segnaposto del campo nel corpo email
+    _MSG_CHIP_TYPES: ['text', 'email', 'tel', 'url', 'number', 'textarea', 'dropdown', 'radio', 'checkbox', 'office', 'fileupload', 'privacy', 'page_url', 'article_title'],
+
+    renderMsgChips() {
+        const box = document.getElementById('wma-msg-chips');
+        if (!box) return;
+
+        const seen = {};
+        const chips = [];
+        (this.fields || []).forEach(f => {
+            if (this._MSG_CHIP_TYPES.indexOf(f.type) === -1) return;
+            const label = (f.label || '').trim();
+            if (!label || seen[label.toLowerCase()]) return;
+            seen[label.toLowerCase()] = true;
+            chips.push(label);
+        });
+
+        box.innerHTML = '';
+        if (!chips.length) { box.hidden = true; return; }
+
+        const lbl = document.createElement('span');
+        lbl.className = 'wma-msg-chips-label';
+        lbl.textContent = this.t('COM_WMACOMMUNICATION_MESSAGES_CHIPS_LABEL');
+        box.appendChild(lbl);
+
+        chips.forEach(label => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'wma-msg-chip';
+            b.textContent = '{' + label + '}';
+            b.addEventListener('click', () => {
+                const ta = document.getElementById('wma-msg-email-body');
+                this.insertAtCursor(ta, '{' + label + '}');
+            });
+            box.appendChild(b);
+        });
+
+        box.hidden = false;
     },
 
     // Migra il vecchio _settings.messages { all|lang: {...} } al nuovo modello

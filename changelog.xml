@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CHANGELOGS>
+    <CHANGELOG>
+        <VERSION>2.2.0</VERSION>
+        <ADDITION>
+            <ITEM>Salvataggio degli invii del form nel database, con modalità per-form (solo email / email + database / solo database)</ITEM>
+            <ITEM>Nuova sezione "Invii ricevuti": elenco filtrabile per form e stato letto/non letto, ricerca, dettaglio invio, export CSV</ITEM>
+            <ITEM>Colonne configurabili nell'elenco invii: sui campi testo/email si può scegliere se e in quale colonna mostrare il valore</ITEM>
+            <ITEM>Conservazione (retention) configurabile per gli invii salvati, come già per gli allegati</ITEM>
+            <ITEM>Badge changelog nella lista estensioni per componente, modulo e plugin (prima solo sul pacchetto)</ITEM>
+        </ADDITION>
+        <FIX>
+            <ITEM>Etichetta del campo Privacy tradotta correttamente anche lato frontend</ITEM>
+        </FIX>
+    </CHANGELOG>
+    <CHANGELOG>
+        <VERSION>2.1.6</VERSION>
+        <ADDITION>
+            <ITEM>Storage privato per gli allegati dei form, fuori dal web root, scaricabili solo via link con token</ITEM>
+            <ITEM>Campi automatici "URL pagina" e "Titolo articolo"</ITEM>
+            <ITEM>Libreria di template per il corpo email, condivisa tra i form</ITEM>
+            <ITEM>Validazione lato server e lato client dei campi del form (email, URL, telefono, numero, scelte)</ITEM>
+            <ITEM>Segnaposto {Etichetta} inseribili con un clic nel tab Messaggi</ITEM>
+        </ADDITION>
+        <FIX>
+            <ITEM>Hardening upload file (denylist estensioni, controllo contenuto, percorso normalizzato)</ITEM>
+            <ITEM>Sanificazione dell'HTML del campo "html" e della descrizione del form</ITEM>
+        </FIX>
+        <NOTE>
+            <ITEM>Requisito: Joomla 6.0 o superiore</ITEM>
+        </NOTE>
+    </CHANGELOG>
+</CHANGELOGS>

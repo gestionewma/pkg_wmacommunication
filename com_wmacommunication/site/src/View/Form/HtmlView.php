@@ -20,6 +20,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+use Wma\Component\Wmacommunication\Site\Helper\PageContextHelper;
 
 class HtmlView extends BaseHtmlView
 {
@@ -193,7 +194,7 @@ class HtmlView extends BaseHtmlView
         $selectedValue = $submittedValue;
 
         // Tipi senza un singolo input con id corrispondente: label senza attributo for
-        $noForTypes = ['radio', 'checkbox', 'html', 'heading', 'divider', 'emptyspace', 'hcaptcha', 'submit'];
+        $noForTypes = ['radio', 'checkbox', 'html', 'heading', 'divider', 'emptyspace', 'hcaptcha', 'submit', 'page_url', 'article_title'];
         $labelFor   = !in_array($type, $noForTypes) ? ' for="' . $name . '"' : '';
 
         $labelHtml = '';
@@ -432,6 +433,19 @@ class HtmlView extends BaseHtmlView
                 $out .= '<button type="submit" id="' . $name . '" name="' . $name . '" class="pul pul-primary wma-cf-submit">' . htmlspecialchars($text) . '</button>';
                 break;
 
+            case 'page_url':
+            case 'article_title': {
+                $autoValue = $type === 'page_url' ? $this->currentPageUrl() : $this->currentArticleTitle();
+                $visible   = ($field['visible'] ?? true) !== false;
+
+                if ($visible) {
+                    $out .= $labelHtml;
+                    $out .= '<div class="wma-cf-auto-value">' . htmlspecialchars($autoValue) . '</div>';
+                }
+                $out .= '<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . htmlspecialchars($autoValue) . '">';
+                break;
+            }
+
             default:
                 $out .= '';
         }
@@ -439,6 +453,36 @@ class HtmlView extends BaseHtmlView
         $out .= '</div>';
 
         return $out;
+    }
+
+    /**
+     * URL assoluta della pagina corrente (campo automatico "URL pagina").
+     */
+    private function currentPageUrl(): string
+    {
+        return Uri::getInstance()->toString();
+    }
+
+    /**
+     * Titolo dell'articolo corrente (campo automatico "Titolo articolo").
+     * Popolato da plg_content_wmacommunication mentre Joomla monta l'articolo
+     * (copre: modulo in una posizione del template su una pagina articolo, e
+     * form inserito con {loadposition} dentro il testo dell'articolo). Se il
+     * plugin non è installato/attivo, o il form è collegato direttamente a una
+     * voce di menu (nessun articolo), ripiega sul titolo della voce di menu attiva.
+     */
+    private function currentArticleTitle(): string
+    {
+        if (class_exists(PageContextHelper::class)) {
+            $title = PageContextHelper::getArticleTitle();
+            if ($title !== '') {
+                return $title;
+            }
+        }
+
+        $menu = Factory::getApplication()->getMenu()->getActive();
+
+        return $menu ? (string) $menu->title : '';
     }
 
     /**

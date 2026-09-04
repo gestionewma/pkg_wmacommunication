@@ -8,10 +8,14 @@ Incrementa la versione (es. `2.1.7`) **negli stessi punti di sempre**:
 
 - `com_wmacommunication/wmacommunication.xml` → `<version>`
 - `mod_wmacommunication/mod_wmacommunication.xml` → `<version>`
+- `plg_content_wmacommunication/wmacommunication.xml` → `<version>`
 - `pkg_wmacommunication/pkg_wmacommunication.xml` → `<version>`
 - `com_wmacommunication/media/joomla.asset.json` → `"version"`
 - fallback nei 2 `WmaInfoField.php` + `Dashboard/HtmlView.php` (`$version` / `'version'`)
 - `pkg_wmacommunication_update.xml` → `<version>` **e** i due URL `v2.1.7`
+- `changelog.xml` → aggiungi in cima un nuovo blocco `<CHANGELOG><VERSION>2.1.7</VERSION>…</CHANGELOG>`
+  con le novità della versione (compare nel popup "Changelog" di Joomla, sia nella
+  lista Gestione estensioni sia nella schermata di aggiornamento)
 
 ## 2. Push del codice su GitHub
 

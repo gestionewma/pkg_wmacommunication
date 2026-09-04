@@ -18,8 +18,8 @@ use Joomla\CMS\Component\ComponentHelper;
  * Gestione dello storage privato degli allegati dei form.
  *
  * I file NON stanno nel web root: la cartella base è, in ordine di preferenza,
- * quella impostata nelle Opzioni, poi `<root>/../wmacommunication-uploads`
- * (fuori dal document root), infine `<root>/wmacommunication-uploads` con un
+ * quella impostata nelle Opzioni, poi `<root>/../_wmacommunication-uploads`
+ * (fuori dal document root), infine `<root>/_wmacommunication-uploads` con un
  * `.htaccess`/`web.config` "deny all" come rete di sicurezza.
  */
 abstract class AttachmentHelper
@@ -63,13 +63,16 @@ abstract class AttachmentHelper
             return rtrim(str_replace('\\', '/', $configured), '/');
         }
 
-        $outside = str_replace('\\', '/', \dirname(JPATH_ROOT)) . '/wmacommunication-uploads';
+        $outside = str_replace('\\', '/', \dirname(JPATH_ROOT)) . '/_wmacommunication-uploads';
 
-        if (is_dir($outside) || @mkdir($outside, 0755, true)) {
+        // @ obbligatorio: con open_basedir attivo (comune sull'hosting gestito),
+        // controllare/creare un percorso fuori dai path consentiti genera un
+        // Warning visibile a schermo, non solo un "false" silenzioso.
+        if (@is_dir($outside) || @mkdir($outside, 0755, true)) {
             return $outside;
         }
 
-        return str_replace('\\', '/', JPATH_ROOT) . '/wmacommunication-uploads';
+        return str_replace('\\', '/', JPATH_ROOT) . '/_wmacommunication-uploads';
     }
 
     /**
@@ -77,7 +80,7 @@ abstract class AttachmentHelper
      */
     public static function isInsideDocroot(string $path): bool
     {
-        $root = str_replace('\\', '/', realpath(JPATH_ROOT) ?: JPATH_ROOT);
+        $root = str_replace('\\', '/', @realpath(JPATH_ROOT) ?: JPATH_ROOT);
         $p    = str_replace('\\', '/', $path);
 
         return strpos($p . '/', $root . '/') === 0;
@@ -90,7 +93,7 @@ abstract class AttachmentHelper
     {
         $dir = self::resolvedPath();
 
-        if (!is_dir($dir)) {
+        if (!@is_dir($dir)) {
             @mkdir($dir, 0755, true);
         }
 
@@ -104,12 +107,12 @@ abstract class AttachmentHelper
      */
     public static function harden(string $dir): void
     {
-        if (!is_dir($dir)) {
+        if (!@is_dir($dir)) {
             return;
         }
 
         $htaccess = $dir . '/.htaccess';
-        if (!is_file($htaccess)) {
+        if (!@is_file($htaccess)) {
             @file_put_contents(
                 $htaccess,
                 "Options -Indexes -ExecCGI\n"
@@ -120,7 +123,7 @@ abstract class AttachmentHelper
         }
 
         $webConfig = $dir . '/web.config';
-        if (!is_file($webConfig)) {
+        if (!@is_file($webConfig)) {
             @file_put_contents(
                 $webConfig,
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<configuration><system.webServer>"
@@ -131,7 +134,7 @@ abstract class AttachmentHelper
         }
 
         $index = $dir . '/index.html';
-        if (!is_file($index)) {
+        if (!@is_file($index)) {
             @file_put_contents($index, "<!DOCTYPE html><title></title>\n");
         }
     }
@@ -146,8 +149,8 @@ abstract class AttachmentHelper
         $rel  = ($row->subdir !== '' ? trim($row->subdir, '/') . '/' : '') . $row->stored_name;
         $path = $base . '/' . $rel;
 
-        $real     = realpath($path);
-        $realBase = realpath($base);
+        $real     = @realpath($path);
+        $realBase = @realpath($base);
 
         if ($real === false || $realBase === false) {
             return null;
@@ -156,7 +159,7 @@ abstract class AttachmentHelper
         $real     = str_replace('\\', '/', $real);
         $realBase = str_replace('\\', '/', $realBase);
 
-        if (strpos($real . '/', $realBase . '/') !== 0 || !is_file($real)) {
+        if (strpos($real . '/', $realBase . '/') !== 0 || !@is_file($real)) {
             return null;
         }
 

@@ -301,6 +301,20 @@ class FormModel extends BaseDatabaseModel
             ];
         }
 
+        // --- Modalità di invio: email (default) | email_db | db ---
+        $deliveryMode = $settings['delivery_mode'] ?? 'email';
+        $saveToDb     = in_array($deliveryMode, ['email_db', 'db'], true);
+        $sendEmail    = $deliveryMode !== 'db';
+
+        if ($saveToDb) {
+            $this->purgeExpiredSubmissions();
+            $this->storeSubmission($form, $formId, $fieldValues, $fields);
+        }
+
+        if (!$sendEmail) {
+            return ['success' => true, 'fieldValues' => $fieldValues, 'settings' => $settings];
+        }
+
         // --- Costruzione corpo email ---
         $emailBody = $this->buildEmailBody($settings, $fieldValues, $fields);
 
@@ -495,6 +509,104 @@ class FormModel extends BaseDatabaseModel
         $this->getDatabase()->insertObject('#__wmacommunication_uploads', $row);
 
         return ['token' => $token, 'original' => $origName];
+    }
+
+    /**
+     * Salva l'invio nella tabella #__wmacommunication_submissions (F1).
+     * Best effort: un errore non deve bloccare l'invio del form.
+     */
+    private function storeSubmission(\stdClass $form, int $formId, array $fieldValues, array $fields = []): void
+    {
+        try {
+            $data = [];
+            foreach ($fieldValues as $fv) {
+                if (in_array($fv['type'] ?? '', ['html', 'heading', 'divider', 'emptyspace', 'hcaptcha', 'submit'], true)) {
+                    continue;
+                }
+                $data[] = [
+                    'label' => $fv['label'] ?? '',
+                    'value' => $fv['value'] ?? '',
+                    'type'  => $fv['type'] ?? '',
+                ];
+            }
+
+            $summaryParts = [];
+            foreach ($data as $d) {
+                if ($d['type'] === 'fileupload' || trim((string) $d['value']) === '') {
+                    continue;
+                }
+                $summaryParts[] = $d['value'];
+                if (count($summaryParts) >= 2) {
+                    break;
+                }
+            }
+            $summary = mb_substr(implode(' — ', $summaryParts), 0, 500);
+
+            // --- Colonne elenco (F1b): campi testo/email marcati con "list_column" (1 o 2) ---
+            $columns = ['1' => ['label' => '', 'value' => ''], '2' => ['label' => '', 'value' => '']];
+            foreach ($fields as $index => $field) {
+                $col = (string) ($field['list_column'] ?? '');
+                if ($col === '' || !isset($columns[$col]) || $columns[$col]['label'] !== '') {
+                    continue;
+                }
+                if (!in_array($field['type'] ?? '', ['text', 'email'], true)) {
+                    continue;
+                }
+                $fv = $fieldValues[$index] ?? null;
+                if ($fv === null) {
+                    continue;
+                }
+                $columns[$col] = [
+                    'label' => (string) ($fv['label'] ?? ''),
+                    'value' => (string) ($fv['value'] ?? ''),
+                ];
+            }
+
+            $app = Factory::getApplication();
+            $row = (object) [
+                'form_id'    => $formId,
+                'form_title' => substr((string) $form->title, 0, 255),
+                'summary'    => $summary,
+                'data'       => json_encode($data, JSON_UNESCAPED_UNICODE),
+                'col1_label' => substr($columns['1']['label'], 0, 255),
+                'col1_value' => mb_substr($columns['1']['value'], 0, 500),
+                'col2_label' => substr($columns['2']['label'], 0, 255),
+                'col2_value' => mb_substr($columns['2']['value'], 0, 500),
+                'ip'         => substr((string) $app->input->server->getString('REMOTE_ADDR', ''), 0, 45),
+                'is_read'    => 0,
+                'created'    => Factory::getDate()->toSql(),
+            ];
+
+            $this->getDatabase()->insertObject('#__wmacommunication_submissions', $row);
+        } catch (\Throwable $e) {
+            // best effort: il salvataggio non deve bloccare l'invio del form
+        }
+    }
+
+    /**
+     * Elimina gli invii più vecchi della retention configurata (0 = mai).
+     * Best effort: un errore non deve bloccare l'invio del form.
+     */
+    private function purgeExpiredSubmissions(): void
+    {
+        $days = (int) ComponentHelper::getParams('com_wmacommunication')->get('submissions_retention', 0);
+        if ($days <= 0) {
+            return;
+        }
+
+        try {
+            $db  = $this->getDatabase();
+            $cut = Factory::getDate('-' . $days . ' days')->toSql();
+
+            $db->setQuery(
+                $db->getQuery(true)
+                    ->delete($db->quoteName('#__wmacommunication_submissions'))
+                    ->where($db->quoteName('created') . ' < :cut')
+                    ->bind(':cut', $cut)
+            )->execute();
+        } catch (\Throwable $e) {
+            // best effort
+        }
     }
 
     /**

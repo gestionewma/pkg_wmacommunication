@@ -5,12 +5,13 @@
         <description>WMA Communication - form builder Joomla 6 (componente + modulo)</description>
         <element>pkg_wmacommunication</element>
         <type>package</type>
-        <version>2.1.6</version>
+        <version>2.2.0</version>
         <infourl title="Release Notes">https://github.com/gestionewma/pkg_wmacommunication/releases</infourl>
+        <changelogurl>https://raw.githubusercontent.com/gestionewma/pkg_wmacommunication/main/changelog.xml</changelogurl>
         <downloads>
-            <downloadurl type="full" format="zip">https://github.com/gestionewma/pkg_wmacommunication/releases/download/v2.1.6/pkg_wmacommunication-v2.1.6.zip</downloadurl>
+            <downloadurl type="full" format="zip">https://github.com/gestionewma/pkg_wmacommunication/releases/download/v2.2.0/pkg_wmacommunication-v2.2.0.zip</downloadurl>
         </downloads>
-        <checksum type="sha256">ad8465b5a960bb423fdd314b271cd521595e18d07a5254dfd55bd0ea451beb3e</checksum>
+        <checksum type="sha256">PLACEHOLDER_DA_AGGIORNARE_DOPO_LA_RELEASE</checksum>
         <targetplatform name="joomla" version="6.*" />
     </update>
 </updates>

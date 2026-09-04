@@ -29,14 +29,18 @@ class HtmlView extends BaseHtmlView
     /** @var array{path: string, inside_docroot: bool, exists: bool} Info cartella allegati */
     protected $attachments = [];
 
+    /** @var int Numero di invii salvati non ancora letti */
+    protected $unreadSubmissions = 0;
+
     public function display($tpl = null): void
     {
         $wa = $this->document->getWebAssetManager();
         $wa->useStyle('com_wmacommunication.admin');
         $wa->useScript('bootstrap.tab');
 
-        $this->credits     = $this->getCredits();
-        $this->attachments = $this->getAttachmentsInfo();
+        $this->credits           = $this->getCredits();
+        $this->attachments       = $this->getAttachmentsInfo();
+        $this->unreadSubmissions = $this->getUnreadSubmissions();
 
         ToolbarHelper::title(Text::_('COM_WMACOMMUNICATION_DASHBOARD'), 'home');
 
@@ -50,8 +54,8 @@ class HtmlView extends BaseHtmlView
     private function getCredits(): array
     {
         $data = [
-            'version'      => '2.1.6',
-            'creationDate' => '02/09/2026',
+            'version'      => '2.2.0',
+            'creationDate' => '04/09/2026',
             'author'       => 'Team Developer by WMA Web Maker Agency',
             'authorEmail'  => 'wmaextension@gmail.com',
             'authorUrl'    => 'https://www.wma.ovh',
@@ -100,6 +104,21 @@ class HtmlView extends BaseHtmlView
             ];
         } catch (\Throwable $e) {
             return ['path' => '', 'inside_docroot' => false, 'exists' => false];
+        }
+    }
+
+    private function getUnreadSubmissions(): int
+    {
+        try {
+            $db    = Factory::getContainer()->get(DatabaseInterface::class);
+            $query = $db->getQuery(true)
+                ->select('COUNT(*)')
+                ->from($db->quoteName('#__wmacommunication_submissions'))
+                ->where($db->quoteName('is_read') . ' = 0');
+
+            return (int) $db->setQuery($query)->loadResult();
+        } catch (\Throwable $e) {
+            return 0;
         }
     }
 }

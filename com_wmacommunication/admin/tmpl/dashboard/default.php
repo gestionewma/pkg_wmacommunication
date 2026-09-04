@@ -37,13 +37,24 @@ $creditMailOk = (bool) filter_var($c['authorEmail'], FILTER_VALIDATE_EMAIL);
                 <i class="fa fa-envelope-open-text"></i>
                 <span><?= Text::_('COM_WMACOMMUNICATION_DASHBOARD_FORMS') ?></span>
             </a>
+            <a href="<?= Route::_('index.php?option=com_wmacommunication&view=templates') ?>" class="wma-dashboard-card">
+                <i class="fa fa-file-text-o"></i>
+                <span><?= Text::_('COM_WMACOMMUNICATION_DASHBOARD_TEMPLATES') ?></span>
+            </a>
+            <a href="<?= Route::_('index.php?option=com_wmacommunication&view=submissions') ?>" class="wma-dashboard-card">
+                <i class="fa fa-inbox"></i>
+                <span><?= Text::_('COM_WMACOMMUNICATION_DASHBOARD_SUBMISSIONS') ?></span>
+                <?php if ($this->unreadSubmissions > 0) : ?>
+                    <span class="wma-dashboard-card-badge"><?= (int) $this->unreadSubmissions ?></span>
+                <?php endif; ?>
+            </a>
         </div>
 
         <div class="wma-dashboard-info">
             <img class="wma-dashboard-info-logo" src="<?= Uri::root() ?>media/com_wmacommunication/images/logo-wma.png" alt="WMA Web Maker Agency">
             <table>
                 <tbody>
-                    <tr><th><?= Text::_('COM_WMACOMMUNICATION_CREDITS_VERSION') ?></th><td><strong><?= $this->escape($c['version']) ?></strong> &mdash; <?= $this->escape($c['creationDate']) ?></td></tr>
+                    <tr><th><?= Text::_('COM_WMACOMMUNICATION_CREDITS_VERSION') ?></th><td><span class="wma-version-badge"><?= $this->escape($c['version']) ?></span> &mdash; <?= $this->escape($c['creationDate']) ?></td></tr>
                     <tr><th><?= Text::_('COM_WMACOMMUNICATION_CREDITS_AUTHOR') ?></th><td><?= $this->escape($c['author']) ?></td></tr>
                     <?php if ($creditMailOk) : ?>
                     <tr><th><?= Text::_('COM_WMACOMMUNICATION_CREDITS_EMAIL') ?></th><td><a href="mailto:<?= $this->escape($c['authorEmail']) ?>"><?= $this->escape($c['authorEmail']) ?></a></td></tr>
@@ -126,7 +137,7 @@ $creditMailOk = (bool) filter_var($c['authorEmail'], FILTER_VALIDATE_EMAIL);
 
                 <div class="wma-dashboard-doc-section">
                     <h4>Campi disponibili</h4>
-                    <p>18 tipi di campo:</p>
+                    <p>20 tipi di campo:</p>
                     <ul>
                         <li><strong>testo</strong> &mdash; campo di input a riga singola</li>
                         <li><strong>email</strong> &mdash; indirizzo email con validazione automatica</li>
@@ -145,6 +156,8 @@ $creditMailOk = (bool) filter_var($c['authorEmail'], FILTER_VALIDATE_EMAIL);
                         <li><strong>hCaptcha</strong> &mdash; verifica antispam (configura nelle Opzioni del componente)</li>
                         <li><strong>privacy</strong> &mdash; checkbox obbligatorio per consenso dati, testo e URL personalizzabili per lingua</li>
                         <li><strong>ufficio</strong> &mdash; menu a tendina per selezionare un ufficio/reparto (formato: <code>Nome Ufficio|email@esempio.it</code>)</li>
+                        <li><strong>URL pagina</strong> &mdash; campo automatico, vedi sotto</li>
+                        <li><strong>titolo articolo</strong> &mdash; campo automatico, vedi sotto</li>
                         <li><strong>pulsante invio</strong> &mdash; bottone per inviare il form</li>
                     </ul>
                 </div>
@@ -166,6 +179,16 @@ $creditMailOk = (bool) filter_var($c['authorEmail'], FILTER_VALIDATE_EMAIL);
                 </div>
 
                 <div class="wma-dashboard-doc-section">
+                    <h4>Campi automatici: URL pagina / Titolo articolo</h4>
+                    <p>Non si compilano: Joomla li riempie da solo quando la pagina viene mostrata, e il valore arriva nell'email/negli invii salvati. Di default sono <strong>visibili in sola lettura</strong> sul form (utile per confermare al visitatore da quale pagina/prodotto sta scrivendo); nelle Opzioni del campo puoi disattivare "Mostra nel form" per nasconderli.</p>
+                    <ul>
+                        <li><strong>URL pagina</strong> &mdash; indirizzo completo della pagina in cui si trova il form. Funziona sempre, in ogni caso d'uso.</li>
+                        <li><strong>Titolo articolo</strong> &mdash; titolo dell'articolo in cui è inserito il form. Funziona quando il form è: (B) un modulo in una posizione del template su una pagina di singolo articolo, oppure (C) inserito con <code>{loadposition xxx}</code> nel testo dell'articolo. Se il form è collegato direttamente a una voce di menu (nessun articolo), viene usato il titolo della voce di menu.</li>
+                    </ul>
+                    <p>Il titolo articolo richiede il plugin <strong>"WMA Communication - Contesto pagina"</strong> attivo (incluso nel pacchetto). Se usi il caso (C) con <code>{loadposition}</code>, verifica in <strong>Sistema &rarr; Gestione &rarr; Plugin</strong> (gruppo Contenuto) che sia ordinato <strong>prima</strong> di "Content - Load Modules" (in italiano "Contenuti - Caricamento moduli").</p>
+                </div>
+
+                <div class="wma-dashboard-doc-section">
                     <h4>Tab Invio &mdash; Configurazione email</h4>
                     <p>Imposta destinatari (A, Cc, Ccn), Reply-To (seleziona un campo email del form), Office-To (seleziona un campo ufficio) e nome mittente. Ogni campo ha un suggerimento che ne spiega la funzione. Nei tab Invio e Messaggi l'anteprima del form viene nascosta per lasciare più spazio alla configurazione.</p>
                 </div>
@@ -177,7 +200,7 @@ $creditMailOk = (bool) filter_var($c['authorEmail'], FILTER_VALIDATE_EMAIL);
 
                 <div class="wma-dashboard-doc-section">
                     <h4>Segnaposto {&hellip;}</h4>
-                    <p>Usa l'etichetta di un campo tra parentesi graffe, es. <code>{Nome}</code> o <code>{Email}</code>, nel messaggio di conferma e nel corpo email: verrà sostituita con il valore inserito dall'utente. Scrivi i segnaposto con l'etichetta della lingua base: funzionano in tutte le lingue.</p>
+                    <p>Usa l'etichetta di un campo tra parentesi graffe, es. <code>{Nome}</code> o <code>{Email}</code>, nel messaggio di conferma e nel corpo email: verrà sostituita con il valore inserito dall'utente. Scrivi i segnaposto con l'etichetta della lingua base: funzionano in tutte le lingue. <strong>Non fa differenza tra maiuscole e minuscole</strong> (<code>{nome}</code>, <code>{Nome}</code> e <code>{NOME}</code> sono equivalenti). Nel tab Messaggi trovi dei pulsanti pronti con i segnaposto di tutti i campi del form.</p>
                 </div>
 
                 <div class="wma-dashboard-doc-section">
@@ -229,7 +252,7 @@ $creditMailOk = (bool) filter_var($c['authorEmail'], FILTER_VALIDATE_EMAIL);
 
                 <div class="wma-dashboard-doc-section">
                     <h4>Available Fields</h4>
-                    <p>18 field types:</p>
+                    <p>20 field types:</p>
                     <ul>
                         <li><strong>text</strong> &mdash; single-line input field</li>
                         <li><strong>email</strong> &mdash; email address with automatic validation</li>
@@ -248,6 +271,8 @@ $creditMailOk = (bool) filter_var($c['authorEmail'], FILTER_VALIDATE_EMAIL);
                         <li><strong>hCaptcha</strong> &mdash; anti-spam verification (configure in Component Options)</li>
                         <li><strong>privacy</strong> &mdash; required checkbox for data consent, text and URL customizable per language</li>
                         <li><strong>office</strong> &mdash; drop-down to select an office/department (format: <code>Office Name|email@example.com</code>)</li>
+                        <li><strong>page URL</strong> &mdash; automatic field, see below</li>
+                        <li><strong>article title</strong> &mdash; automatic field, see below</li>
                         <li><strong>submit button</strong> &mdash; button to send the form</li>
                     </ul>
                 </div>
@@ -269,6 +294,16 @@ $creditMailOk = (bool) filter_var($c['authorEmail'], FILTER_VALIDATE_EMAIL);
                 </div>
 
                 <div class="wma-dashboard-doc-section">
+                    <h4>Automatic fields: Page URL / Article title</h4>
+                    <p>Not fillable: Joomla populates them itself when the page is shown, and the value reaches the email/saved submissions. By default they are <strong>shown read-only</strong> on the form (useful to confirm to the visitor which page/product they're writing from); in the field's Options you can turn off "Show on the form" to hide them.</p>
+                    <ul>
+                        <li><strong>Page URL</strong> &mdash; full address of the page the form is on. Always works, in every use case.</li>
+                        <li><strong>Article title</strong> &mdash; title of the article the form is placed in. Works when the form is: (B) a module in a template position on a single-article page, or (C) inserted with <code>{loadposition xxx}</code> in the article text. If the form is linked directly to a menu item (no article), the menu item title is used instead.</li>
+                    </ul>
+                    <p>The article title requires the <strong>"WMA Communication - Page context"</strong> plugin to be enabled (included in the package). If you use case (C) with <code>{loadposition}</code>, check in <strong>System &rarr; Manage &rarr; Plugins</strong> (Content group) that it is ordered <strong>before</strong> "Content - Load Modules".</p>
+                </div>
+
+                <div class="wma-dashboard-doc-section">
                     <h4>Sending Tab &mdash; Email Configuration</h4>
                     <p>Set recipients (To, Cc, Ccn), Reply-To (select an email field from the form), Office-To (select an office field), and sender name. Each field has a hint explaining its function. In the Sending and Messages tabs, the form preview is hidden to leave more room for configuration.</p>
                 </div>
@@ -280,7 +315,7 @@ $creditMailOk = (bool) filter_var($c['authorEmail'], FILTER_VALIDATE_EMAIL);
 
                 <div class="wma-dashboard-doc-section">
                     <h4>Placeholders {&hellip;}</h4>
-                    <p>Use a field label in curly braces, e.g. <code>{Name}</code> or <code>{Email}</code>, in the success message and email body: it will be replaced with the user's submitted value. Write placeholders using the base-language label: they work in every language.</p>
+                    <p>Use a field label in curly braces, e.g. <code>{Name}</code> or <code>{Email}</code>, in the success message and email body: it will be replaced with the user's submitted value. Write placeholders using the base-language label: they work in every language. <strong>Case-insensitive</strong> (<code>{name}</code>, <code>{Name}</code> and <code>{NAME}</code> are equivalent). The Messages tab has ready-made buttons with the placeholders of every form field.</p>
                 </div>
 
                 <div class="wma-dashboard-doc-section">
@@ -332,7 +367,7 @@ $creditMailOk = (bool) filter_var($c['authorEmail'], FILTER_VALIDATE_EMAIL);
 
                 <div class="wma-dashboard-doc-section">
                     <h4>Champs disponibles</h4>
-                    <p>18 types de champ :</p>
+                    <p>20 types de champ :</p>
                     <ul>
                         <li><strong>texte</strong> &mdash; champ de saisie sur une seule ligne</li>
                         <li><strong>email</strong> &mdash; adresse email avec validation automatique</li>
@@ -351,6 +386,8 @@ $creditMailOk = (bool) filter_var($c['authorEmail'], FILTER_VALIDATE_EMAIL);
                         <li><strong>hCaptcha</strong> &mdash; vérification anti-spam (configurer dans les Options du composant)</li>
                         <li><strong>confidentialité</strong> &mdash; case à cocher obligatoire pour le consentement aux données, texte et URL personnalisables par langue</li>
                         <li><strong>bureau</strong> &mdash; menu déroulant pour sélectionner un bureau/service (format : <code>Nom du Bureau|email@exemple.fr</code>)</li>
+                        <li><strong>URL de la page</strong> &mdash; champ automatique, voir ci-dessous</li>
+                        <li><strong>titre de l'article</strong> &mdash; champ automatique, voir ci-dessous</li>
                         <li><strong>bouton d'envoi</strong> &mdash; bouton pour envoyer le formulaire</li>
                     </ul>
                 </div>
@@ -372,6 +409,16 @@ $creditMailOk = (bool) filter_var($c['authorEmail'], FILTER_VALIDATE_EMAIL);
                 </div>
 
                 <div class="wma-dashboard-doc-section">
+                    <h4>Champs automatiques : URL de la page / Titre de l'article</h4>
+                    <p>Non modifiables : Joomla les remplit lui-même à l'affichage de la page, et la valeur arrive dans l'e-mail/les envois enregistrés. Par défaut ils sont <strong>affichés en lecture seule</strong> dans le formulaire (utile pour confirmer au visiteur depuis quelle page/produit il écrit) ; dans les Options du champ vous pouvez désactiver « Afficher dans le formulaire » pour les masquer.</p>
+                    <ul>
+                        <li><strong>URL de la page</strong> &mdash; adresse complète de la page où se trouve le formulaire. Fonctionne toujours, dans tous les cas.</li>
+                        <li><strong>Titre de l'article</strong> &mdash; titre de l'article dans lequel se trouve le formulaire. Fonctionne quand le formulaire est : (B) un module dans une position du template sur une page d'article unique, ou (C) inséré avec <code>{loadposition xxx}</code> dans le texte de l'article. Si le formulaire est lié directement à un élément de menu (pas d'article), le titre de l'élément de menu est utilisé à la place.</li>
+                    </ul>
+                    <p>Le titre de l'article nécessite le plugin <strong>« WMA Communication - Contexte de page »</strong> activé (inclus dans le pack). Si vous utilisez le cas (C) avec <code>{loadposition}</code>, vérifiez dans <strong>Système &rarr; Gestion &rarr; Plugins</strong> (groupe Contenu) qu'il est ordonné <strong>avant</strong> « Content - Load Modules ».</p>
+                </div>
+
+                <div class="wma-dashboard-doc-section">
                     <h4>Onglet Envoi &mdash; Configuration email</h4>
                     <p>Définissez les destinataires (À, Cc, Cci), Reply-To (sélectionnez un champ email du formulaire), Office-To (sélectionnez un champ bureau) et le nom de l'expéditeur. Chaque champ a une astuce expliquant sa fonction. Dans les onglets Envoi et Messages, l'aperçu du formulaire est masqué pour laisser plus de place à la configuration.</p>
                 </div>
@@ -383,7 +430,7 @@ $creditMailOk = (bool) filter_var($c['authorEmail'], FILTER_VALIDATE_EMAIL);
 
                 <div class="wma-dashboard-doc-section">
                     <h4>Espaces réservés {&hellip;}</h4>
-                    <p>Utilisez le libellé d'un champ entre accolades, ex. <code>{Nom}</code> ou <code>{Email}</code>, dans le message de confirmation et le corps d'email : il sera remplacé par la valeur saisie par l'utilisateur. Écrivez les espaces réservés avec le libellé de la langue de base : ils fonctionnent dans toutes les langues.</p>
+                    <p>Utilisez le libellé d'un champ entre accolades, ex. <code>{Nom}</code> ou <code>{Email}</code>, dans le message de confirmation et le corps d'email : il sera remplacé par la valeur saisie par l'utilisateur. Écrivez les espaces réservés avec le libellé de la langue de base : ils fonctionnent dans toutes les langues. <strong>Insensible à la casse</strong> (<code>{nom}</code>, <code>{Nom}</code> et <code>{NOM}</code> sont équivalents). L'onglet Messages propose des boutons prêts à l'emploi avec les espaces réservés de tous les champs du formulaire.</p>
                 </div>
 
                 <div class="wma-dashboard-doc-section">
