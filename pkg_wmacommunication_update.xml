@@ -6,6 +6,7 @@
         <element>pkg_wmacommunication</element>
         <type>package</type>
         <version>2.1.6</version>
+        <infourl title="Release Notes">https://github.com/gestionewma/pkg_wmacommunication/releases</infourl>
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/gestionewma/pkg_wmacommunication/releases/download/v2.1.6/pkg_wmacommunication-v2.1.6.zip</downloadurl>
         </downloads>
