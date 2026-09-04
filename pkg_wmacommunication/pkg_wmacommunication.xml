@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="package" method="upgrade">
+    <name>PKG_WMACOMMUNICATION</name>
+    <packagename>wmacommunication</packagename>
+    <author>Team Developer by WMA Web Maker Agency</author>
+    <authorEmail>wmaextension@gmail.com</authorEmail>
+    <authorUrl>https://www.wma.ovh</authorUrl>
+    <creationDate>02/09/2026</creationDate>
+    <copyright>Copyright (C) 2026 Gestionewma. Tutti i diritti riservati.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <version>2.1.6</version>
+    <description>PKG_WMACOMMUNICATION_XML_DESCRIPTION</description>
+
+    <scriptfile>script.php</scriptfile>
+
+    <files>
+        <file type="component" id="com_wmacommunication">com_wmacommunication.zip</file>
+        <file type="module" id="mod_wmacommunication" client="site">mod_wmacommunication.zip</file>
+    </files>
+
+    <languages folder="language">
+        <language tag="it-IT">it-IT/pkg_wmacommunication.sys.ini</language>
+        <language tag="en-GB">en-GB/pkg_wmacommunication.sys.ini</language>
+        <language tag="fr-FR">fr-FR/pkg_wmacommunication.sys.ini</language>
+    </languages>
+
+    <updateservers>
+        <server type="extension" priority="1" name="WMA Communication Update Site">https://raw.githubusercontent.com/gestionewma/pkg_wmacommunication/main/pkg_wmacommunication_update.xml</server>
+    </updateservers>
+</extension>

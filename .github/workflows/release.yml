@@ -1,0 +1,49 @@
+name: Build Joomla Package ZIP
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build package ZIP
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -e
+          mkdir -p _stage
+
+          # 1) ZIP del componente (wmacommunication.xml alla radice dello zip)
+          ( cd com_wmacommunication && zip -r -X "../_stage/com_wmacommunication.zip" . -x "*.git*" )
+
+          # 2) ZIP del modulo (mod_wmacommunication.xml alla radice dello zip)
+          ( cd mod_wmacommunication && zip -r -X "../_stage/mod_wmacommunication.zip" . -x "*.git*" )
+
+          # 3) File del pacchetto: manifest + script + lingue + i due zip
+          cp pkg_wmacommunication/pkg_wmacommunication.xml _stage/
+          cp pkg_wmacommunication/script.php               _stage/
+          cp -r pkg_wmacommunication/language              _stage/
+
+          # 4) ZIP del pacchetto
+          ( cd _stage && zip -r -X "../pkg_wmacommunication-${TAG}.zip" . )
+
+          # Copia a nome fisso per un link di download stabile
+          cp "pkg_wmacommunication-${TAG}.zip" pkg_wmacommunication.zip
+
+          echo "SHA256:"
+          sha256sum "pkg_wmacommunication-${TAG}.zip"
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            pkg_wmacommunication-${{ github.ref_name }}.zip
+            pkg_wmacommunication.zip

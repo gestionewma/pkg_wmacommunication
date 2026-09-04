@@ -1,0 +1,31 @@
+{
+    "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+    "name": "com_wmacommunication",
+    "version": "2.1.6",
+    "description": "WMA Communication assets",
+    "license": "GPL-2.0-or-later",
+    "assets": [
+        {
+            "name": "com_wmacommunication.site",
+            "type": "style",
+            "uri": "com_wmacommunication/site.css"
+        },
+        {
+            "name": "com_wmacommunication.admin",
+            "type": "style",
+            "uri": "com_wmacommunication/admin.css"
+        },
+        {
+            "name": "com_wmacommunication.site.js",
+            "type": "script",
+            "uri": "com_wmacommunication/site.js",
+            "dependencies": ["core"]
+        },
+        {
+            "name": "com_wmacommunication.editor",
+            "type": "script",
+            "uri": "com_wmacommunication/editor.js",
+            "dependencies": ["core"]
+        }
+    ]
+}

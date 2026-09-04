@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+    <fieldset name="general" label="COM_WMACOMMUNICATION_FORM_GENERAL">
+        <field
+            name="title"
+            type="text"
+            label="JGLOBAL_TITLE"
+            required="true"
+        />
+        <field
+            name="alias"
+            type="alias"
+            label="JFIELD_ALIAS_LABEL"
+            hint="JFIELD_ALIAS_PLACEHOLDER"
+        />
+        <field
+            name="description"
+            type="textarea"
+            label="JGLOBAL_DESCRIPTION"
+            rows="5"
+            filter="safehtml"
+        />
+        <field
+            name="recipient_email"
+            type="email"
+            label="COM_WMACOMMUNICATION_FORM_RECIPIENT_EMAIL"
+            description="COM_WMACOMMUNICATION_FORM_RECIPIENT_EMAIL_DESC"
+        />
+        <field
+            name="email_subject"
+            type="text"
+            label="COM_WMACOMMUNICATION_FORM_EMAIL_SUBJECT"
+        />
+        <field
+            name="success_message"
+            type="textarea"
+            label="COM_WMACOMMUNICATION_FORM_SUCCESS_MESSAGE"
+            rows="3"
+            filter="safehtml"
+        />
+    </fieldset>
+
+    <fieldset name="sidebar" label="COM_WMACOMMUNICATION_FORM_SIDEBAR">
+        <field
+            name="state"
+            type="list"
+            label="JSTATUS"
+            default="1"
+        >
+            <option value="1">JPUBLISHED</option>
+            <option value="0">JUNPUBLISHED</option>
+        </field>
+
+        <field
+            name="id"
+            type="hidden"
+            filter="int"
+        />
+        <field
+            name="fields"
+            type="hidden"
+            filter="raw"
+        />
+        <field
+            name="settings"
+            type="hidden"
+            filter="raw"
+        />
+    </fieldset>
+</form>

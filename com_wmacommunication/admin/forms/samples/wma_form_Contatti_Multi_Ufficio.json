@@ -1,0 +1,13 @@
+{
+    "title": "Contatti multi ufficio",
+    "alias": "",
+    "description": null,
+    "fields": "[{\"type\":\"text\",\"uid\":\"f_b2000001\",\"label\":\"Nome\",\"placeholder\":\"\",\"required\":true,\"readonly\":false,\"hidelabel\":false,\"labelinside\":false,\"width\":\"50\",\"minchars\":0,\"maxchars\":0,\"minwords\":0,\"maxwords\":0},{\"type\":\"text\",\"uid\":\"f_b2000002\",\"label\":\"Oggetto\",\"placeholder\":\"\",\"required\":false,\"readonly\":false,\"hidelabel\":false,\"labelinside\":false,\"width\":\"50\",\"minchars\":0,\"maxchars\":0,\"minwords\":0,\"maxwords\":0},{\"type\":\"email\",\"uid\":\"f_b2000003\",\"label\":\"Email\",\"placeholder\":\"\",\"required\":true,\"readonly\":false,\"hidelabel\":false,\"labelinside\":false,\"width\":\"100\"},{\"type\":\"office\",\"uid\":\"f_b2000004\",\"label\":\"Ufficio\",\"width\":\"100\",\"required\":true,\"hidelabel\":false,\"options\":\"Amministrazione|amministrazione@esempio.it\\nCommerciale|commerciale@esempio.it\\nSupporto|supporto@esempio.it\"},{\"type\":\"textarea\",\"uid\":\"f_b2000005\",\"label\":\"Messaggio\",\"placeholder\":\"\",\"required\":true,\"readonly\":false,\"hidelabel\":false,\"labelinside\":false,\"width\":\"100\",\"rows\":6,\"minchars\":0,\"maxchars\":0,\"minwords\":0,\"maxwords\":0},{\"type\":\"privacy\",\"uid\":\"f_b2000006\",\"label\":\"Privacy\",\"width\":\"100\",\"privacy_text\":\"Ho letto e accetto l'informativa sulla privacy\",\"privacy_url\":\"\"},{\"type\":\"submit\",\"uid\":\"f_b2000007\",\"label\":\"Invia\",\"width\":\"100\",\"text\":\"Invia\"}]",
+    "settings": "{\"to\":\"\",\"cc\":\"\",\"ccn\":\"\",\"replyto\":\"2\",\"officeto\":\"3\",\"sender_name\":\"\",\"messages_base\":{\"success_msg\":\"Grazie {Nome}, la tua richiesta e' stata inoltrata all'ufficio {Ufficio}.\",\"email_body\":\"\"},\"translations\":{\"_base\":\"it-IT\"}}",
+    "recipient_email": "",
+    "email_subject": "",
+    "success_message": null,
+    "state": 1,
+    "checked_out": null,
+    "checked_out_time": null
+}

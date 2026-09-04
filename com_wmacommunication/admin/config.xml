@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <fieldset
+        name="hcaptcha"
+        label="COM_WMACOMMUNICATION_CONFIG_HCAPTCHA"
+        description="COM_WMACOMMUNICATION_CONFIG_HCAPTCHA_DESC"
+    >
+        <field
+            name="hcaptcha_site_key"
+            type="text"
+            label="COM_WMACOMMUNICATION_CONFIG_HCAPTCHA_SITE_KEY"
+            description="COM_WMACOMMUNICATION_CONFIG_HCAPTCHA_SITE_KEY_DESC"
+            filter="string"
+        />
+        <field
+            name="hcaptcha_secret_key"
+            type="text"
+            label="COM_WMACOMMUNICATION_CONFIG_HCAPTCHA_SECRET_KEY"
+            description="COM_WMACOMMUNICATION_CONFIG_HCAPTCHA_SECRET_KEY_DESC"
+            filter="string"
+        />
+    </fieldset>
+
+    <fieldset
+        name="attachments"
+        label="COM_WMACOMMUNICATION_CONFIG_ATTACHMENTS"
+        description="COM_WMACOMMUNICATION_CONFIG_ATTACHMENTS_DESC"
+    >
+        <field
+            name="attachments_path"
+            type="text"
+            label="COM_WMACOMMUNICATION_CONFIG_ATTACHMENTS_PATH"
+            description="COM_WMACOMMUNICATION_CONFIG_ATTACHMENTS_PATH_DESC"
+            filter="string"
+        />
+        <field
+            name="attachments_retention"
+            type="number"
+            label="COM_WMACOMMUNICATION_CONFIG_ATTACHMENTS_RETENTION"
+            description="COM_WMACOMMUNICATION_CONFIG_ATTACHMENTS_RETENTION_DESC"
+            default="90"
+            min="0"
+            filter="integer"
+        />
+    </fieldset>
+
+    <fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL">
+        <field
+            name="rules"
+            type="rules"
+            label=""
+            class="inputbox"
+            validate="rules"
+            filter="rules"
+            component="com_wmacommunication"
+            section="component"
+        />
+    </fieldset>
+
+    <fieldset
+        name="info"
+        label="COM_WMACOMMUNICATION_FIELDSET_INFO"
+        addfieldprefix="Wma\Component\Wmacommunication\Administrator\Field"
+    >
+        <field name="credits_info" type="WmaInfo" label="" />
+    </fieldset>
+</config>

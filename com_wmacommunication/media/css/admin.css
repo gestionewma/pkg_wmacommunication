@@ -1,0 +1,842 @@
+/**
+ * @package     Wma.Component.Wmacommunication
+ * @subpackage  com_wmacommunication
+ *
+ * @author      WMA Web Maker Agency
+ * @copyright   (C) 2026 WMA Web Maker Agency
+ * @license     GNU General Public License version 2 or later
+ * @link        https://www.webmakeragency.com
+ * @version     2.1.0
+ * @date        03/07/2026
+ */
+
+/* ============================================================
+   VARIABILI — tema chiaro (default)
+   ============================================================ */
+:root {
+    --wma-primary:       #1a3867;
+    --wma-primary-light: #eef1f7;
+    --wma-accent:        #7cb900;
+    --wma-bg:            var(--body-bg, #fff);
+    --wma-bg-card:       var(--card-bg, #fff);
+    --wma-bg-light:      var(--template-bg-light, #f8f9fa);
+    --wma-bg-hover:      var(--template-bg-dark-5, #e9ecef);
+    --wma-bg-raised:     var(--card-bg, #fff);
+    --wma-bg-input:      var(--template-bg-light, #f0f4fb);
+    --wma-text:          var(--body-color, #495057);
+    --wma-text-muted:    var(--text-muted, #6c757d);
+    --wma-border:        var(--form-control-border, #ced4da);
+    --wma-border-light:  var(--template-bg-dark-10, #dee2e6);
+    --wma-radius:        4px;
+    --wma-radius-lg:     6px;
+    --wma-font-sm:       .85rem;
+    --wma-font-xs:       .8rem;
+    --wma-transition:    .2s;
+}
+
+/* ============================================================
+   DARK MODE — override per variabili non gestite da Atum
+   ============================================================ */
+[data-bs-theme=dark] {
+    --wma-primary-light: #1a2740;
+    --wma-bg-light:      var(--main-bg, #171c24);
+    --wma-bg-hover:      var(--template-bg-dark-75, #2a3340);
+    --wma-bg-card:       var(--card-bg, #0f151d);
+    --wma-bg-raised:     var(--main-card-bg, #171c24);
+    --wma-bg-input:      var(--template-bg-dark-70, #1e2530);
+    --wma-border-light:  var(--template-bg-dark-50, #4a515b);
+}
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+.wma-dashboard {
+    max-width: 900px;
+    margin: 2rem auto;
+}
+
+.wma-dashboard-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.wma-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+    gap: 1rem;
+    flex: 1 1 300px;
+}
+
+.wma-dashboard-info {
+    flex: 1 1 340px;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    padding: 1rem 1.25rem;
+    background: var(--wma-bg-card);
+    border: 1px solid var(--wma-border-light);
+    border-radius: var(--wma-radius-lg);
+}
+
+.wma-dashboard-info-logo {
+    max-height: 46px;
+    width: auto;
+    align-self: flex-start;
+}
+
+.wma-dashboard-info table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--wma-font-sm);
+}
+
+.wma-dashboard-info th,
+.wma-dashboard-info td {
+    padding: .3rem .5rem;
+    border-bottom: 1px solid var(--wma-border-light);
+    text-align: left;
+    vertical-align: top;
+}
+
+.wma-dashboard-info tr:last-child th,
+.wma-dashboard-info tr:last-child td {
+    border-bottom: none;
+}
+
+.wma-dashboard-info th {
+    width: 38%;
+    font-weight: 600;
+    color: var(--wma-text-muted);
+    white-space: nowrap;
+}
+
+.wma-dashboard-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+    padding: 2rem 1rem;
+    background: var(--wma-bg-card);
+    border: 1px solid var(--wma-border-light);
+    border-radius: var(--wma-radius-lg);
+    text-decoration: none;
+    color: var(--wma-text);
+    transition: background var(--wma-transition), border-color var(--wma-transition), color var(--wma-transition);
+}
+
+.wma-dashboard-card:hover {
+    background: var(--wma-bg-hover);
+    border-color: var(--wma-accent);
+    color: var(--wma-accent);
+}
+
+.wma-dashboard-card i {
+    font-size: 2.5rem;
+}
+
+.wma-dashboard-card span {
+    font-size: .95rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.wma-dashboard code {
+    color: #fff;
+    word-wrap: break-word;
+    font-size: .875em;
+    background-color: var(--wma-accent);
+    padding: 1px 5px;
+    border-radius: 5px;
+}
+
+.wma-dashboard-attachments {
+    margin: 1rem 0 0;
+    padding: .6rem .9rem;
+    background: var(--wma-bg-card);
+    border: 1px solid var(--wma-border-light);
+    border-radius: var(--wma-radius);
+    font-size: .9rem;
+    line-height: 1.5;
+}
+
+.wma-dashboard-attachments code {
+    word-break: break-all;
+}
+
+.wma-dashboard-attachments.is-warning {
+    background: #fff3cd;
+    border-color: #ffc107;
+    color: #664d03;
+}
+
+.wma-dashboard-attachments-note {
+    display: block;
+    margin-top: .25rem;
+    font-weight: 600;
+}
+
+.wma-dashboard-docs {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--wma-bg-card);
+    border-radius: var(--wma-radius-lg);
+    border: 1px solid var(--wma-border-light);
+}
+
+.wma-dashboard-docs .nav-tabs {
+    border-bottom: 2px solid var(--wma-border-light);
+    margin-bottom: 1.5rem;
+}
+
+.wma-dashboard-docs .nav-tabs .nav-link {
+    border: none;
+    color: var(--wma-text-muted);
+    font-weight: 600;
+    padding: .5rem 1.25rem;
+    background: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: color var(--wma-transition), border-color var(--wma-transition);
+}
+
+.wma-dashboard-docs .nav-tabs .nav-link:hover {
+    color: var(--wma-primary);
+    border-color: transparent;
+}
+
+.wma-dashboard-docs .nav-tabs .nav-link.active {
+    color: var(--wma-primary);
+    background: none;
+    border-bottom-color: var(--wma-primary);
+}
+
+.wma-dashboard-docs .tab-content {
+    min-height: 200px;
+}
+
+.wma-dashboard-doc-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--wma-border-light);
+}
+
+.wma-dashboard-doc-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.wma-dashboard-doc-section h4 {
+    margin-top: 0;
+    margin-bottom: .5rem;
+    color: var(--wma-text);
+}
+
+.wma-dashboard-doc-section p,
+.wma-dashboard-doc-section ul,
+.wma-dashboard-doc-section li {
+    color: var(--wma-text-muted);
+}
+
+.wma-dashboard-doc-section ul {
+    padding-left: 1.5rem;
+}
+
+.wma-dashboard-doc-section li {
+    margin-bottom: .25rem;
+}
+
+.wma-dashboard-doc-section pre {
+    background: var(--wma-bg-hover);
+    padding: .75rem 1rem;
+    border-radius: var(--wma-radius);
+    font-size: var(--wma-font-sm);
+    overflow-x: auto;
+    margin: .5rem 0;
+    color: var(--wma-text);
+}
+
+/* ============================================================
+   EDITOR - STRUTTURA
+   ============================================================ */
+.wma-editor {
+    display: flex;
+    flex-direction: column;
+}
+
+.wma-editor-main {
+    display: flex;
+}
+
+/* ============================================================
+   EDITOR - TOPBAR
+   ============================================================ */
+.wma-editor-topbar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: .5rem 1rem;
+    background: var(--wma-bg-card);
+    border-bottom: 1px solid var(--wma-border-light);
+    flex-wrap: wrap;
+}
+
+.wma-editor-topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+}
+
+.wma-editor-topbar-title {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.wma-editor-lang {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.wma-editor-lang label {
+    white-space: nowrap;
+    font-weight: 600;
+    margin: 0;
+    color: #457d54;
+}
+
+.wma-editor-lang select {
+    padding: .3rem .6rem;
+    font-size: .85rem;
+    border: 1px solid var(--wma-border);
+    border-radius: var(--wma-radius);
+}
+
+.wma-editor--translating .wma-editor-lang select {
+    border-color: #b6e5f1;
+    background: #eef9fc;
+}
+
+.wma-editor-topbar-title label {
+    white-space: nowrap;
+    font-weight: 600;
+    margin: 0;
+    color: #457d54;
+}
+
+.wma-editor-topbar-title input,
+.wma-editor .wma-editor-topbar-title input#wma-form-title {
+    width: 300px;
+    min-width: 300px;
+    padding: .35rem .75rem;
+    font-size: .9rem;
+    border: 1px solid var(--wma-border);
+    border-radius: var(--wma-radius);
+    background: var(--wma-bg);
+    color: var(--wma-text);
+}
+
+.wma-editor .wma-editor-topbar-title input#wma-form-title:focus {
+    outline: none;
+    border-color: var(--wma-primary);
+}
+
+/* ============================================================
+   EDITOR - SIDEBAR
+   ============================================================ */
+.wma-editor-sidebar {
+    width: 450px;
+    min-width: 450px;
+    background: var(--wma-bg);
+    border-right: 1px solid var(--wma-border-light);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* ============================================================
+   EDITOR - TAB
+   ============================================================ */
+.wma-editor-tabs {
+    display: flex;
+    border-bottom: 2px solid var(--wma-border-light);
+}
+
+.wma-tab-btn {
+    flex: 1;
+    padding: .6rem .25rem;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    font-size: var(--wma-font-xs);
+    font-weight: 500;
+    color: var(--wma-text-muted);
+    cursor: pointer;
+    min-width: 106px;
+    transition: color var(--wma-transition), border-color var(--wma-transition);
+}
+
+.wma-tab-btn.active {
+    color: var(--wma-primary);
+    border-bottom-color: var(--wma-primary);
+}
+
+.wma-tab-content {
+    display: none;
+    padding: .75rem;
+}
+
+.wma-tab-content.active {
+    display: block;
+}
+
+/* ============================================================
+   EDITOR - TIPI CAMPO
+   ============================================================ */
+.wma-field-types {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .5rem;
+}
+
+.wma-field-type-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .4rem;
+    padding: .75rem .5rem;
+    background: var(--wma-bg-card);
+    border: 1px solid var(--wma-border-light);
+    border-radius: var(--wma-radius);
+    cursor: pointer;
+    font-size: var(--wma-font-xs);
+    text-align: center;
+    color: var(--wma-text);
+    transition: background var(--wma-transition), border-color var(--wma-transition), color var(--wma-transition);
+}
+
+.wma-field-type-item:hover {
+    background: var(--wma-bg-hover);
+    border-color: var(--wma-primary);
+    color: var(--wma-primary);
+}
+
+.wma-field-type-item i {
+    font-size: 1.25rem;
+    color: var(--wma-text-muted);
+}
+
+.wma-field-type-item:hover i {
+    color: var(--wma-primary);
+}
+
+.wma-label-hint {
+    display: block;
+    color: var(--wma-text-muted);
+    font-size: var(--wma-font-xs);
+    line-height: 1.4;
+    padding-top: .15rem;
+}
+
+/* ============================================================
+   EDITOR - LISTA CAMPI
+   ============================================================ */
+.wma-fields-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+}
+
+.wma-field-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .5rem .75rem;
+    background: var(--wma-bg-card);
+    border: 1px solid var(--wma-border-light);
+    border-radius: var(--wma-radius);
+    cursor: pointer;
+    color: var(--wma-text);
+    transition: background var(--wma-transition);
+}
+
+.wma-field-item:hover {
+    background: var(--wma-bg-hover);
+}
+
+.wma-field-item.selected {
+    border-color: var(--wma-primary);
+    background: var(--wma-primary-light);
+}
+
+.wma-field-item-label {
+    font-size: var(--wma-font-sm);
+    font-weight: 500;
+    flex: 1;
+}
+
+.wma-field-item-actions {
+    display: flex;
+    gap: .25rem;
+}
+
+.wma-field-item-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--wma-text-muted);
+    padding: .2rem .3rem;
+    border-radius: 3px;
+    transition: color var(--wma-transition), background var(--wma-transition);
+}
+
+.wma-field-item-actions button:hover {
+    color: var(--wma-primary);
+    background: var(--wma-border-light);
+}
+
+.wma-field-item-actions button:disabled {
+    opacity: .3;
+    cursor: not-allowed;
+}
+
+.wma-field-item-actions button:disabled:hover {
+    color: var(--wma-text-muted);
+    background: none;
+}
+
+/* ============================================================
+   EDITOR - OPZIONI CAMPO
+   ============================================================ */
+.wma-no-selection {
+    color: var(--wma-text-muted);
+    font-size: var(--wma-font-sm);
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.wma-field-options-form {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.wma-field-option {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
+.wma-field-option label {
+    font-size: var(--wma-font-xs);
+    font-weight: 500;
+    color: var(--wma-text);
+}
+
+.wma-field-option input[type="text"],
+.wma-field-option input[type="number"],
+.wma-field-option textarea,
+.wma-field-option select {
+    width: 100%;
+    padding: .35rem .5rem;
+    border: 1px solid var(--wma-border);
+    border-radius: var(--wma-radius);
+    font-size: var(--wma-font-sm);
+    background: var(--wma-bg-input);
+    color: var(--wma-text);
+}
+
+/* Tab Messaggi: textarea messaggio di conferma + corpo email, sfondo più
+   contrastato rispetto al pannello */
+#wma-messages-block textarea {
+    background: #dce9ff;
+    border-color: #9db8e0;
+    color: #1a1a1a;
+}
+
+#wma-messages-block textarea::placeholder {
+    color: #5f6b7a;
+}
+
+.wma-field-option-check {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-direction: row;
+}
+
+/* ============================================================
+   EDITOR - TAB INVIO
+   ============================================================ */
+.wma-sending-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.wma-sending-options .wma-field-option input[type="text"],
+.wma-sending-options .wma-field-option select {
+    border: 1px solid #b6e5f1;
+}
+
+/* ============================================================
+   EDITOR - ANTEPRIMA
+   ============================================================ */
+.wma-editor-preview {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--wma-bg-light);
+    overflow: hidden;
+}
+
+.wma-editor-preview-toolbar {
+    padding: .5rem 1rem;
+    background: var(--wma-bg-card);
+    border-bottom: 1px solid var(--wma-border-light);
+}
+
+.wma-editor-preview-container {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.wma-preview-form {
+    background: var(--wma-bg-raised);
+    border-radius: var(--wma-radius-lg);
+    padding: 2rem;
+    width: 100%;
+    max-width: 900px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.1);
+    color: var(--wma-text);
+}
+
+.wma-preview-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+}
+
+.wma-preview-field {
+    padding: .5rem;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+}
+
+.wma-preview-field label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: .25rem;
+    font-size: .9rem;
+    color: var(--wma-text);
+}
+
+.wma-preview-field input,
+.wma-preview-field textarea,
+.wma-preview-field select {
+    width: 100%;
+    padding: .4rem .6rem;
+    border: 1px solid var(--wma-border);
+    border-radius: var(--wma-radius);
+    font-size: .9rem;
+    background: #d9dde3;
+    color: #212529;
+}
+
+.wma-preview-field textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.wma-preview-empty {
+    color: var(--wma-text-muted);
+    text-align: center;
+    padding: 3rem;
+    font-size: .9rem;
+}
+
+.wma-preview-privacy {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.wma-preview-privacy label {
+    display: flex !important;
+    align-items: center !important;
+    gap: .5rem;
+    cursor: default;
+}
+
+.wma-required {
+    color: var(--danger, #dc3545);
+}
+
+.wma-preview-hcaptcha {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .6rem 1.25rem .6rem .75rem;
+    background: var(--wma-bg-raised);
+    border: 2px solid var(--wma-border);
+    border-radius: var(--wma-radius);
+    color: var(--wma-text);
+    font-size: .9rem;
+    font-weight: 500;
+}
+
+.wma-preview-hcaptcha::before {
+    content: '☑';
+    font-size: 1.2rem;
+    color: var(--danger, #e8421a);
+}
+
+/* ============================================================
+   CODE EDITOR
+   ============================================================ */
+.cm-editor {
+    border: 1px solid var(--wma-border);
+    border-radius: var(--wma-radius);
+    background: var(--wma-bg-input);
+    color: var(--wma-text);
+}
+.cm-editor .cm-scroller {
+    background: var(--wma-bg-input);
+    color: var(--wma-text);
+}
+.cm-editor .cm-content {
+    background: var(--wma-bg-input);
+    color: var(--wma-text);
+    caret-color: var(--wma-text);
+}
+.cm-editor .cm-gutters {
+    background: var(--wma-bg-light);
+    color: var(--wma-text-muted);
+    border-right: 1px solid var(--wma-border-light);
+}
+.cm-editor .cm-activeLine {
+    background: var(--wma-bg-hover);
+}
+.cm-editor .cm-cursor {
+    border-left-color: var(--wma-text);
+}
+.cm-editor .cm-selectionBackground,
+/* ============================================================
+   PULSANTI
+   ============================================================ */
+.pul {
+    display: inline-block;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: var(--wma-radius);
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+}
+
+.pul-primary {
+    --btn-primary-color: #fff;
+    --btn-primary-bg: #132f53;
+    --btn-primary-border: 1px solid #132f53;
+    color: var(--btn-primary-color);
+    background-color: var(--btn-primary-bg);
+    border: var(--btn-primary-border);
+}
+
+.pul-primary:hover {
+    background-color: #102847;
+    border-color: #0f2642;
+    color: #fff;
+}
+
+.pul-primary:active {
+    background-color: #0f2642;
+    border-color: #0e233e;
+    color: #fff;
+}
+
+/* Editor bloccato (checked out da altro utente) */
+.wma-editor--locked {
+    pointer-events: none;
+    opacity: .6;
+    user-select: none;
+}
+
+/* Anteprima nascosta — sidebar a tutta larghezza (tabs Invio e Messaggi) */
+.wma-editor--preview-hidden .wma-editor-preview {
+    display: none;
+}
+
+.wma-editor--preview-hidden .wma-editor-sidebar {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+    border-right: none;
+}
+
+.wma-msg-hint {
+    display: block;
+    color: var(--wma-text-muted);
+    font-size: var(--wma-font-xs);
+    line-height: 1.4;
+    margin-top: .25rem;
+}
+
+.wma-msg-toolbar {
+    display: flex;
+    gap: .35rem;
+    margin-bottom: .35rem;
+}
+
+.wma-msg-toolbar button {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    padding: .25rem .5rem;
+    font-size: var(--wma-font-xs);
+    background: var(--wma-bg-raised);
+    border: 1px solid var(--wma-border);
+    border-radius: var(--wma-radius);
+    cursor: pointer;
+    color: var(--wma-text);
+}
+
+.wma-msg-toolbar button:hover {
+    background: var(--wma-bg-hover);
+    border-color: var(--wma-text-muted);
+}
+
+.wma-input-group {
+    display: flex;
+    gap: .35rem;
+    align-items: center;
+}
+
+.wma-input-group input {
+    flex: 1;
+    min-width: 0;
+}
+
+.wma-input-group button {
+    flex-shrink: 0;
+}

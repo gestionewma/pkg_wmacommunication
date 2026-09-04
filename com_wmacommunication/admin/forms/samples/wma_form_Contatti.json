@@ -1,0 +1,13 @@
+{
+    "title": "Contatti",
+    "alias": "",
+    "description": null,
+    "fields": "[{\"type\":\"text\",\"uid\":\"f_a1000001\",\"label\":\"Nome\",\"placeholder\":\"\",\"required\":true,\"readonly\":false,\"hidelabel\":false,\"labelinside\":false,\"width\":\"50\",\"minchars\":0,\"maxchars\":0,\"minwords\":0,\"maxwords\":0},{\"type\":\"text\",\"uid\":\"f_a1000002\",\"label\":\"Oggetto\",\"placeholder\":\"\",\"required\":false,\"readonly\":false,\"hidelabel\":false,\"labelinside\":false,\"width\":\"50\",\"minchars\":0,\"maxchars\":0,\"minwords\":0,\"maxwords\":0},{\"type\":\"email\",\"uid\":\"f_a1000003\",\"label\":\"Email\",\"placeholder\":\"\",\"required\":true,\"readonly\":false,\"hidelabel\":false,\"labelinside\":false,\"width\":\"100\"},{\"type\":\"textarea\",\"uid\":\"f_a1000004\",\"label\":\"Messaggio\",\"placeholder\":\"\",\"required\":true,\"readonly\":false,\"hidelabel\":false,\"labelinside\":false,\"width\":\"100\",\"rows\":6,\"minchars\":0,\"maxchars\":0,\"minwords\":0,\"maxwords\":0},{\"type\":\"privacy\",\"uid\":\"f_a1000005\",\"label\":\"Privacy\",\"width\":\"100\",\"privacy_text\":\"Ho letto e accetto l'informativa sulla privacy\",\"privacy_url\":\"\"},{\"type\":\"submit\",\"uid\":\"f_a1000006\",\"label\":\"Invia\",\"width\":\"100\",\"text\":\"Invia\"}]",
+    "settings": "{\"to\":\"\",\"cc\":\"\",\"ccn\":\"\",\"replyto\":\"2\",\"sender_name\":\"\",\"messages_base\":{\"success_msg\":\"Grazie {Nome}, abbiamo ricevuto il tuo messaggio e ti risponderemo al piu' presto.\",\"email_body\":\"\"},\"translations\":{\"_base\":\"it-IT\"}}",
+    "recipient_email": "",
+    "email_subject": "",
+    "success_message": null,
+    "state": 1,
+    "checked_out": null,
+    "checked_out_time": null
+}

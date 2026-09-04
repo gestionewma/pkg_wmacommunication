@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<updates>
+    <update>
+        <name>PKG_WMACOMMUNICATION</name>
+        <description>WMA Communication - form builder Joomla 6 (componente + modulo)</description>
+        <element>pkg_wmacommunication</element>
+        <type>package</type>
+        <version>2.1.6</version>
+        <downloads>
+            <downloadurl type="full" format="zip">https://github.com/gestionewma/pkg_wmacommunication/releases/download/v2.1.6/pkg_wmacommunication-v2.1.6.zip</downloadurl>
+        </downloads>
+        <checksum type="sha256"></checksum>
+        <targetplatform name="joomla" version="6.*" />
+    </update>
+</updates>

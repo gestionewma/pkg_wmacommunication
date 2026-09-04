@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="module" client="site" method="upgrade">
+    <name>MOD_WMACOMMUNICATION</name>
+    <author>Team Developer by WMA Web Maker Agency</author>
+    <authorEmail>wmaextension@gmail.com</authorEmail>
+    <authorUrl>https://www.wma.ovh</authorUrl>
+    <creationDate>02/09/2026</creationDate>
+    <copyright>Copyright (C) 2026 Gestionewma. Tutti i diritti riservati.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <version>2.1.6</version>
+    <description>MOD_WMACOMMUNICATION_DESC</description>
+
+    <namespace path="src">Wma\Module\Wmacommunication</namespace>
+
+    <files>
+        <folder module="mod_wmacommunication">services</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+
+    <languages>
+        <language tag="it-IT">language/it-IT/mod_wmacommunication.ini</language>
+        <language tag="it-IT">language/it-IT/mod_wmacommunication.sys.ini</language>
+        <language tag="en-GB">language/en-GB/mod_wmacommunication.ini</language>
+        <language tag="en-GB">language/en-GB/mod_wmacommunication.sys.ini</language>
+        <language tag="fr-FR">language/fr-FR/mod_wmacommunication.ini</language>
+        <language tag="fr-FR">language/fr-FR/mod_wmacommunication.sys.ini</language>
+    </languages>
+
+    <config>
+        <fields name="params">
+            <fieldset name="basic" label="JBASIC">
+
+                <field
+                    name="form_id"
+                    type="sql"
+                    label="MOD_WMACOMMUNICATION_FORM_SELECT"
+                    description="MOD_WMACOMMUNICATION_FORM_SELECT_DESC"
+                    query="SELECT a.id AS value, a.title AS text FROM #__wmacommunication_forms AS a WHERE a.state = 1 ORDER BY a.title ASC"
+                    key_field="value"
+                    value_field="text"
+                    header="MOD_WMACOMMUNICATION_FORM_SELECT_NONE"
+                    required="true"
+                />
+
+            </fieldset>
+
+            <fieldset
+                name="info"
+                label="MOD_WMACOMMUNICATION_FIELDSET_INFO"
+                addfieldprefix="Wma\Module\Wmacommunication\Site\Field"
+            >
+                <field name="credits_info" type="WmaInfo" label="" hiddenLabel="true" />
+            </fieldset>
+        </fields>
+    </config>
+
+</extension>

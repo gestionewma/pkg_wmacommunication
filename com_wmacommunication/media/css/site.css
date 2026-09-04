@@ -1,0 +1,301 @@
+:root {
+    --wma-cf-primary-color: #0d6efd;
+    --wma-cf-secondary-color: #6c757d;
+    --wma-cf-border-radius: 4px;
+    --bianco:#ffffff;
+}
+
+.wma-communication-form {
+    max-width: 700px;
+}
+
+.wma-cf-title {
+    margin-bottom: 1rem;
+}
+
+.wma-cf-description {
+    margin-bottom: 1.5rem;
+    color: var(--wma-cf-secondary-color);
+}
+
+.wma-cf-form .wma-cf-field {
+    margin-bottom: 1rem;
+}
+
+.wma-cf-form label {
+    display: block;
+    margin-bottom: .25rem;
+    font-weight: 500;
+}
+
+.wma-cf-form input[type="text"],
+.wma-cf-form input[type="email"],
+.wma-cf-form input[type="tel"],
+.wma-cf-form textarea,
+.wma-cf-form select {
+    width: 100%;
+    border-radius: var(--wma-cf-border-radius);
+}
+
+.wma-cf-submit {
+    margin-top: 1.5rem;
+}
+.wma-cf-privacy input {
+	margin-bottom: 0;
+}
+span.wma-cf-privacy-text {
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+}
+/********************* form *********************/
+
+.wma-communication-form {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.wma-cf-title {
+    margin-bottom: 1rem;
+}
+
+.wma-cf-description {
+    margin-bottom: 1.5rem;
+    color: var(--wma-cf-secondary-color);
+}
+
+.wma-cf-fields {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.wma-cf-field {
+    padding: .5rem;
+    box-sizing: border-box;
+    margin-bottom: .5rem;
+}
+
+.wma-cf-field label {
+    display: block;
+    margin-bottom: .25rem;
+    font-weight: 500;
+}
+
+.wma-cf-required {
+    color: red;
+}
+
+.wma-cf-field input[type="text"],
+.wma-cf-field input[type="email"],
+.wma-cf-field input[type="tel"],
+.wma-cf-field input[type="url"],
+.wma-cf-field input[type="number"],
+.wma-cf-field input[type="file"],
+.wma-cf-field textarea,
+.wma-cf-field select {
+    width: 100%;
+    padding: .4rem .6rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: 500;
+    box-sizing: border-box;
+}
+
+.wma-cf-field textarea {
+    resize: vertical;
+    min-height: 130px !important;
+}
+
+.wma-cf-choices {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
+.wma-cf-choices-side {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.wma-cf-choices-col-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.wma-cf-choices-col-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.wma-cf-privacy {
+       display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.wma-cf-privacy-label {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.wma-cf-submit {
+    margin-top: .5rem;
+}
+
+.h-captcha {
+    margin-bottom: 1rem;
+}
+.wma-cf-privacy-text a,
+.wma-cf-privacy-text a:hover,
+.wma-cf-privacy-text a:focus {
+    pointer-events: all;
+    text-decoration: none !important;
+}
+
+.wma-cf-privacy {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.wma-cf-submit {
+    margin-top: 1.5rem;
+    display: inline-block;
+    padding: .375rem 3rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.5;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    color: var(--bianco) !important;
+    background-color: var(--wma-cf-primary-color);
+    border-radius: var(--wma-cf-border-radius);
+}
+
+/* Responsive: sotto 520px tutti i campi a piena larghezza */
+@media (max-width: 520px) {
+    .wma-cf-field {
+        width: 100% !important;
+    }
+}
+
+.wma-cf-submit:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.wma-hcaptcha-notice {
+    margin-top: .4rem;
+    padding: .5rem .75rem;
+    border-radius: 4px;
+    font-size: 1.3rem;
+    line-height: 1.4;
+}
+
+.wma-hcaptcha-notice--error {
+    background: #f8d7da;
+    border: 1px solid #f5c2c7;
+    color: #842029;
+}
+
+.wma-hcaptcha-notice--warning {
+    background: #fff3cd;
+    border: 1px solid #ffecb5;
+    color: #664d03;
+}
+
+.wma-cf-field--error input,
+.wma-cf-field--error textarea,
+.wma-cf-field--error select {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.wma-cf-field--error > label,
+.wma-cf-error label {
+    color: #dc3545;
+}
+
+/* Messaggio d'errore sotto il campo (span iniettato dal JS) */
+span.wma-cf-error {
+    display: block;
+    margin-top: .3rem;
+    padding: .2rem .5rem;
+    font-size: .8rem;
+    line-height: 1.3;
+    color: #fff;
+    background: #dc3545;
+    border-radius: .2rem;
+    width: fit-content;
+    max-width: 100%;
+}
+
+/* ============================================
+   SUCCESS ALERT — stile Bootstrap
+   ============================================ */
+joomla-alert[type="success"],
+.alert-success {
+    width: 90%;
+    height: auto;
+    margin: 1rem auto;
+    padding: 1rem 1.5rem;
+    background-color: #d1e7dd;
+    border: 1px solid #badbcc;
+    border-radius: .5rem;
+    color: #0a3622;
+    font-size: 1rem;
+    line-height: 1.6;
+    box-shadow: 0 1px 3px rgba(0,0,0,.1);
+}
+
+joomla-alert[type="success"] .alert-heading,
+.alert-success .alert-heading {
+    display: none;
+}
+
+joomla-alert[type="success"] .alert-wrapper,
+.alert-success .alert-wrapper {
+    width: 100%;
+}
+
+joomla-alert[type="success"] .alert-message,
+.alert-success .alert-message {
+    margin: 0;
+    padding: 0;
+}
+
+joomla-alert[type="success"] .joomla-alert--close,
+.alert-success .joomla-alert--close {
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #0a3622;
+    opacity: .6;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+joomla-alert[type="success"] .joomla-alert--close:hover,
+.alert-success .joomla-alert--close:hover {
+    opacity: 1;
+}
+
+/* Errore validazione lato server — bordo rosso sui campi obbligatori vuoti */
+.wma-cf-error input,
+.wma-cf-error select,
+.wma-cf-error textarea {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.wma-cf-error label {
+    color: #dc3545;
+}
