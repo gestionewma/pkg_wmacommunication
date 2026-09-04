@@ -9,7 +9,7 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/gestionewma/pkg_wmacommunication/releases/download/v2.1.6/pkg_wmacommunication-v2.1.6.zip</downloadurl>
         </downloads>
-        <checksum type="sha256"></checksum>
+        <checksum type="sha256">ad8465b5a960bb423fdd314b271cd521595e18d07a5254dfd55bd0ea451beb3e</checksum>
         <targetplatform name="joomla" version="6.*" />
     </update>
 </updates>
