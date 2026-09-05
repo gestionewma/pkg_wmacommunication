@@ -28,7 +28,7 @@ class WmaInfoField extends FormField
 
     public function getInput(): string
     {
-        $version      = '2.2.0';
+        $version      = '2.2.1';
         $creationDate = '04/09/2026';
         $author       = 'Team Developer by WMA Web Maker Agency';
         $email        = 'wmaextension@gmail.com';

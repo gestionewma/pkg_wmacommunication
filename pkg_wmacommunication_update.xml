@@ -6,13 +6,13 @@
         <element>pkg_wmacommunication</element>
         <type>package</type>
         <client>site</client>
-        <version>2.2.0</version>
+        <version>2.2.1</version>
         <infourl title="Release Notes">https://github.com/gestionewma/pkg_wmacommunication/releases</infourl>
         <changelogurl>https://raw.githubusercontent.com/gestionewma/pkg_wmacommunication/main/changelog.xml</changelogurl>
         <downloads>
-            <downloadurl type="full" format="zip">https://github.com/gestionewma/pkg_wmacommunication/releases/download/v2.2.0/pkg_wmacommunication-v2.2.0.zip</downloadurl>
+            <downloadurl type="full" format="zip">https://github.com/gestionewma/pkg_wmacommunication/releases/download/v2.2.1/pkg_wmacommunication-v2.2.1.zip</downloadurl>
         </downloads>
-        <sha256>8d6552af876e1f725bdc0ec443c5ae9d15b6627c50f2fbaeac006a80a7c66f77</sha256>
+        <sha256>PLACEHOLDER_DA_AGGIORNARE_DOPO_LA_RELEASE</sha256>
         <targetplatform name="joomla" version="6.*" />
     </update>
 </updates>

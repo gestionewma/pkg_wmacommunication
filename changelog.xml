@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CHANGELOGS>
     <CHANGELOG>
+        <VERSION>2.2.1</VERSION>
+        <ADDITION>
+            <ITEM>4 nuovi template di serie per il corpo email (Curricula, Editorial Clean &amp; Elegant, Premium Dark, Premium Dark Modern), con logo incluso nel pacchetto</ITEM>
+        </ADDITION>
+    </CHANGELOG>
+    <CHANGELOG>
         <VERSION>2.2.0</VERSION>
         <ADDITION>
             <ITEM>Salvataggio degli invii del form nel database, con modalità per-form (solo email / email + database / solo database)</ITEM>

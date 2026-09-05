@@ -54,7 +54,7 @@ class HtmlView extends BaseHtmlView
     private function getCredits(): array
     {
         $data = [
-            'version'      => '2.2.0',
+            'version'      => '2.2.1',
             'creationDate' => '04/09/2026',
             'author'       => 'Team Developer by WMA Web Maker Agency',
             'authorEmail'  => 'wmaextension@gmail.com',
