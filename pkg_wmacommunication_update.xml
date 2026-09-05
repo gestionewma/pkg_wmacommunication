@@ -12,7 +12,7 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/gestionewma/pkg_wmacommunication/releases/download/v2.2.1/pkg_wmacommunication-v2.2.1.zip</downloadurl>
         </downloads>
-        <sha256>PLACEHOLDER_DA_AGGIORNARE_DOPO_LA_RELEASE</sha256>
+        <sha256>0f4997c6a85a15c11ac9b247edea993f6d78e298c7d987b7df4fa00ff20ac4a3</sha256>
         <targetplatform name="joomla" version="6.*" />
     </update>
 </updates>
